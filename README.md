@@ -1,4 +1,4 @@
-# saianirudhsiddi.com - placeholder till deploying the actual domain 
+# https://www.saianirudh.blog/
 
 My personal site and blog — built with [Astro](https://astro.build).
 
