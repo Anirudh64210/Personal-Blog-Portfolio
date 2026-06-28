@@ -1,0 +1,98 @@
+---
+import "../styles/gotham.css";
+import { site, terminal } from "../config";
+import interactions from "../_interactions.js?raw";
+
+interface Props {
+  title?: string;
+  description?: string;
+  image?: string;
+  type?: "website" | "article";
+  published?: string;
+  modified?: string;
+  schema?: object;
+}
+const {
+  title = `${site.name} — ${site.role}`,
+  description = site.description,
+  image = "/portrait.jpg",
+  type = "website",
+  published,
+  modified,
+  schema,
+} = Astro.props;
+
+const canonical = new URL(Astro.url.pathname, site.url).href;
+const ogImage = new URL(image, site.url).href;
+const termLines = terminal.map(([t, x]) => ({ t, x }));
+const bootJs = `const TERM_LINES=${JSON.stringify(termLines)};\n` + interactions;
+---
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <meta name="author" content={site.name} />
+    <meta name="robots" content="index, follow" />
+
+    <!-- Open Graph -->
+    <meta property="og:type" content={type} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:site_name" content={site.name} />
+    {published && <meta property="article:published_time" content={published} />}
+    {modified && <meta property="article:modified_time" content={modified} />}
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImage} />
+
+    <link rel="alternate" type="application/rss+xml" title={site.name} href="/rss.xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Hanken+Grotesk:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap"
+      rel="stylesheet"
+    />
+    {schema && <script type="application/ld+json" set:html={JSON.stringify(schema)} />}
+  </head>
+  <body>
+    <div class="morse-wall" aria-hidden="true"></div>
+    <div class="scan" aria-hidden="true"></div>
+
+    <header>
+      <div class="wrap head-in">
+        <a class="brand" href="/">SAI ANIRUDH <b>// SIDDI</b></a>
+        <nav>
+          <a href="/#about">About</a>
+          <a href="/#press">Press</a>
+          <a href="/#blog">Blog</a>
+          <a href="/#work">Work</a>
+          <a href="/#experience">Experience</a>
+          <a href="/#education">Education</a>
+          <a href="/#skills">Skills</a>
+          <a href="/#contact">Contact</a>
+        </nav>
+      </div>
+    </header>
+
+    <slot />
+
+    <footer>
+      <div class="wrap foot-in">
+        <span>// end of file — {site.fileNo}</span>
+        <span>// local <span id="clock2">--:--:--</span></span>
+      </div>
+    </footer>
+
+    <script is:inline set:html={bootJs}></script>
+  </body>
+</html>

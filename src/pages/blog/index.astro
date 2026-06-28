@@ -1,0 +1,34 @@
+---
+import Base from "../../layouts/Base.astro";
+import GrowthBadge from "../../components/GrowthBadge.astro";
+import { computeStatus } from "../../lib/status";
+import { site } from "../../config";
+import { getCollection } from "astro:content";
+
+const posts = (await getCollection("blog", ({ data }) => !data.draft)).sort(
+  (a, b) => (b.data.tended ?? b.data.planted).valueOf() - (a.data.tended ?? a.data.planted).valueOf()
+);
+const fmt = (d: Date) => d.toLocaleDateString("en-US", { month: "short", year: "numeric" });
+---
+<Base title={`Writing — ${site.name}`} description={`Notes and essays by ${site.name} on ML systems, interpretability, and AI engineering.`}>
+  <main>
+    <section class="block blog-index"><div class="wrap" style="max-width:760px;margin-inline:auto">
+      <span class="label" data-text="// transmissions"></span>
+      <h1 class="h2 reveal">From the notebook</h1>
+      <p class="lead reveal" style="margin-bottom:1.4rem">Everything I've written so far. Newest first.</p>
+      <ul class="posts reveal">
+        {posts.map((p) => (
+          <li><a href={`/blog/${p.id}`}>
+            <span class="t">{p.data.title}</span>
+            <span class="d">{fmt(p.data.tended ?? p.data.planted)}</span>
+            <span class="meta">
+              <GrowthBadge status={p.data.status ?? computeStatus(p.data.planted, p.data.tended)} />
+              <span class="d">{p.data.topic}</span>
+            </span>
+          </a></li>
+        ))}
+      </ul>
+      <a class="allback" href="/#blog">← back home</a>
+    </div></section>
+  </main>
+</Base>

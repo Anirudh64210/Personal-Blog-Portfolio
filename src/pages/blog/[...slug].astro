@@ -1,0 +1,57 @@
+---
+import Base from "../../layouts/Base.astro";
+import GrowthBadge from "../../components/GrowthBadge.astro";
+import { computeStatus } from "../../lib/status";
+import { site } from "../../config";
+import { getCollection, render } from "astro:content";
+
+export async function getStaticPaths() {
+  const posts = await getCollection("blog", ({ data }) => !data.draft);
+  return posts.map((post) => ({ params: { slug: post.id }, props: { post } }));
+}
+
+const { post } = Astro.props;
+const { Content } = await render(post);
+const d = post.data;
+const status = d.status ?? computeStatus(d.planted, d.tended);
+const long = (x: Date) => x.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
+const canonical = new URL(`/blog/${post.id}`, site.url).href;
+
+const schema = {
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  headline: d.title,
+  description: d.description,
+  datePublished: d.planted.toISOString(),
+  dateModified: (d.tended ?? d.planted).toISOString(),
+  author: { "@type": "Person", name: site.name, url: site.url },
+  mainEntityOfPage: canonical,
+  image: new URL("/portrait.jpg", site.url).href,
+};
+---
+<Base
+  title={`${d.title} — ${site.name}`}
+  description={d.description}
+  type="article"
+  published={d.planted.toISOString()}
+  modified={(d.tended ?? d.planted).toISOString()}
+  schema={schema}
+>
+  <main>
+    <article class="article">
+      <span class="label" data-text={`// ${d.topic}`}></span>
+      <h1 class="h1">{d.title}</h1>
+      <div class="ameta">
+        <GrowthBadge status={status} />
+        <span>Planted {long(d.planted)}{d.tended && ` · Tended ${long(d.tended)}`}</span>
+        {d.backlinkHref && (
+          <a class="backlink" href={d.backlinkHref} target="_blank" rel="noopener">↩ {d.backlinkLabel ?? "source"}</a>
+        )}
+      </div>
+      <div class="prose reveal">
+        <Content />
+        <a class="allback" href="/blog">← all transmissions</a>
+      </div>
+    </article>
+  </main>
+</Base>

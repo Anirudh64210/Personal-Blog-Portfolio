@@ -1,0 +1,9 @@
+---
+import type { Status } from "../lib/status";
+import { STATUS_TIP } from "../lib/status";
+const { status } = Astro.props as { status: Status };
+const label = status.charAt(0).toUpperCase() + status.slice(1);
+---
+<span class={`badge badge--${status}`} data-tip={STATUS_TIP[status]}>
+  <span class="dot"></span>{label}
+</span>

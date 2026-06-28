@@ -1,0 +1,180 @@
+---
+import Base from "../layouts/Base.astro";
+import GrowthBadge from "../components/GrowthBadge.astro";
+import ProjectCard from "../components/ProjectCard.astro";
+import { computeStatus } from "../lib/status";
+import {
+  site, hero, terminal, facts, socials, press,
+  projects, experience, education, skills,
+} from "../config";
+import { getCollection } from "astro:content";
+
+const posts = (await getCollection("blog", ({ data }) => !data.draft)).sort(
+  (a, b) =>
+    (b.data.tended ?? b.data.planted).valueOf() -
+    (a.data.tended ?? a.data.planted).valueOf()
+);
+const fmt = (d: Date) => d.toLocaleDateString("en-US", { month: "short", year: "numeric" });
+
+const schema = {
+  "@context": "https://schema.org",
+  "@type": "Person",
+  name: site.name,
+  jobTitle: site.role,
+  url: site.url,
+  email: site.email,
+  address: { "@type": "PostalAddress", addressLocality: "Las Vegas", addressRegion: "NV", addressCountry: "US" },
+  sameAs: socials.filter((s) => s.label !== "Email").map((s) => s.href),
+};
+---
+<Base schema={schema}>
+  <!-- HERO -->
+  <section class="hero" id="top">
+    <div class="searchlight" aria-hidden="true"></div>
+    <div class="wrap">
+      <div class="dossier">
+        <span>FILE NO. <b>{site.fileNo}</b></span>
+        <span>LAS VEGAS // <b>{site.coords}</b></span>
+        <span>LOCAL <b id="clock">--:--:--</b></span>
+        <span><i class="live"></i>STATUS <b style="color:var(--accent)">AVAILABLE</b></span>
+      </div>
+      <span class="ey">{hero.eyebrow}</span>
+      <h1 class="name" data-text={site.name.toUpperCase()}></h1>
+      <span class="loc">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a7 7 0 0 0-7 7c0 5 7 13 7 13s7-8 7-13a7 7 0 0 0-7-7zm0 9.5A2.5 2.5 0 1 1 12 6.5a2.5 2.5 0 0 1 0 5z"/></svg>
+        {site.location}
+      </span>
+      <p class="tag" id="tagline" data-text={hero.tagline}></p>
+      <div class="cta-row">
+        <a class="btn btn--solid" href="#work">View the work</a>
+        <a class="btn" href="#contact">Open a channel</a>
+      </div>
+    </div>
+    <div class="scrollhint"><span>scroll to decrypt</span><span>↓</span></div>
+  </section>
+
+  <!-- 01 WHO -->
+  <section class="block" id="about"><div class="wrap">
+    <span class="label" data-text="// 01 — WHO"></span>
+    <div class="about-grid">
+      <div class="reveal">
+        <div class="term">
+          <div class="term-bar"><i></i><i></i><i></i><span class="term-title">anirudh@vegas: ~/about</span></div>
+          <div class="term-body" id="term"></div>
+        </div>
+      </div>
+      <div class="reveal">
+        <div class="portrait brackets"><img src="/portrait.jpg" alt={`${site.name}, ${site.role}`} width="900" height="1503" /></div>
+        <dl class="facts">
+          {facts.map(([k, v, accent]) => (
+            <div><dt>{k}</dt><dd>{accent ? <b>{v}</b> : v}</dd></div>
+          ))}
+        </dl>
+      </div>
+    </div>
+  </div></section>
+
+  <!-- 02 APPEARED ON -->
+  <section class="block" id="press"><div class="wrap">
+    <span class="label" data-text="// 02 — APPEARED ON"></span>
+    <h2 class="h2 reveal">In the press</h2>
+    <div class="reveal press-win">
+      <div class="term">
+        <div class="term-bar"><i></i><i></i><i></i><span class="term-title">anirudh@vegas: ~/press</span></div>
+        <div class="term-body">
+          <div class="line"><span class="pmt">$</span> cat appearances.log</div>
+          {press.map((a) => (
+            <a class="press" href={a.href} target="_blank" rel="noopener">
+              <span class="pdate">{a.date}</span><span class="psrc">{a.src}</span><span class="ptitle">{a.title}</span><span class="ar">↗</span>
+            </a>
+          ))}
+          <div class="line"><span class="pmt">$</span> <span class="cur"></span></div>
+        </div>
+      </div>
+    </div>
+  </div></section>
+
+  <!-- 03 TRANSMISSIONS -->
+  <section class="block" id="blog"><div class="wrap">
+    <span class="label" data-text="// 03 — TRANSMISSIONS"></span>
+    <h2 class="h2 reveal">From the notebook</h2>
+    <p class="lead reveal" style="margin-bottom:1.4rem">Notes from building ML systems — interpretability, probes, and the infra around them. Each tagged with how settled it is.</p>
+    <ul class="posts reveal">
+      {posts.map((p) => (
+        <li><a href={`/blog/${p.id}`}>
+          <span class="t">{p.data.title}</span>
+          <span class="d">{fmt(p.data.tended ?? p.data.planted)}</span>
+          <span class="meta">
+            <GrowthBadge status={p.data.status ?? computeStatus(p.data.planted, p.data.tended)} />
+            <span class="d">{p.data.topic}</span>
+          </span>
+        </a></li>
+      ))}
+    </ul>
+  </div></section>
+
+  <!-- 04 FIELD WORK -->
+  <section class="block" id="work"><div class="wrap">
+    <span class="label" data-text="// 04 — FIELD WORK"></span>
+    <h2 class="h2 reveal">Selected projects</h2>
+    <p class="lead reveal" style="margin-bottom:1rem">Each card opens its GitHub repo, where the README breaks down the build.</p>
+    <div class="work-grid">
+      {projects.map((p) => <ProjectCard p={p} />)}
+    </div>
+  </div></section>
+
+  <!-- 05 SERVICE RECORD -->
+  <section class="block" id="experience"><div class="wrap">
+    <span class="label" data-text="// 05 — SERVICE RECORD"></span>
+    <h2 class="h2 reveal">Experience</h2>
+    <ul class="rec reveal">
+      {experience.map((e) => (
+        <li><span class="yr">{e.yr}</span><span><span class="role">{e.role}</span><br><span class="org">{e.org}</span></span><span class="loc2">{e.loc}</span></li>
+      ))}
+    </ul>
+  </div></section>
+
+  <!-- 06 EDUCATION -->
+  <section class="block" id="education"><div class="wrap">
+    <span class="label" data-text="// 06 — EDUCATION"></span>
+    <h2 class="h2 reveal">Education</h2>
+    <ul class="rec reveal">
+      {education.map((e) => (
+        <li><span class="yr">{e.yr}</span><span><span class="role">{e.role}</span><br><span class="org">{e.org}</span></span><span class="loc2">{e.loc}</span></li>
+      ))}
+    </ul>
+  </div></section>
+
+  <!-- 07 LOADOUT -->
+  <section class="block" id="skills"><div class="wrap">
+    <span class="label" data-text="// 07 — LOADOUT"></span>
+    <h2 class="h2 reveal">Skills</h2>
+    <div class="skills-head reveal"><span class="pmt">$</span> ./scan --skills</div>
+    <div class="skillset reveal">
+      {skills.map(([cat, items]) => (
+        <>
+          <div class="cat">{cat}/</div>
+          <div class="chips">{items.map((x) => <span class="chip" data-text={x}>{x}</span>)}</div>
+        </>
+      ))}
+    </div>
+  </div></section>
+
+  <!-- 08 OPEN A CHANNEL -->
+  <section class="block" id="contact"><div class="wrap">
+    <span class="label" data-text="// 08 — OPEN A CHANNEL"></span>
+    <div class="contact">
+      <div class="transmit reveal brackets">
+        <span class="ey" style="color:var(--muted)">// transmission</span>
+        <p class="big">Building<br>something?</p>
+        <p class="lead" style="margin-bottom:1.1rem">Open to AI / ML engineering roles and interesting collaborations. Tell me what you're building.</p>
+        <a class="mailto" href={`mailto:${site.email}`}>{site.email}</a>
+      </div>
+      <div class="socials reveal">
+        {socials.map((s) => (
+          <a href={s.href} target={s.href.startsWith("http") ? "_blank" : undefined} rel="noopener">{s.label} <span class="ar">↗</span></a>
+        ))}
+      </div>
+    </div>
+  </div></section>
+</Base>

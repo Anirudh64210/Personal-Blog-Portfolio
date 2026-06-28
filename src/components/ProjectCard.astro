@@ -1,0 +1,17 @@
+---
+const { p } = Astro.props as {
+  p: { num: number; code: string; title: string; summary: string; tags: string[]; repo: string };
+};
+const NUM: Record<number, string> = { 1: ".----", 2: "..---", 3: "...--", 4: "....-" };
+const marks = [...(NUM[p.num] || "")].map((s) => (s === "." ? "dot" : "dash"));
+---
+<a class="proj reveal" href={p.repo} target="_blank" rel="noopener" data-code={p.code}>
+  <div class="mthumb">
+    {marks.map((c) => <i class={`mk ${c}`}></i>)}
+  </div>
+  <span class="code" data-text={p.code}>{p.code}</span>
+  <h3>{p.title}</h3>
+  <p>{p.summary}</p>
+  <div class="tags">{p.tags.map((t) => <span>{t}</span>)}</div>
+  <span class="open">Open dossier →</span>
+</a>
