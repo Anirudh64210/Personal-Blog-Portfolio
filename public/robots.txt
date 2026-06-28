@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://saianirudhsiddi.com/sitemap.xml
+Sitemap: https://www.saianirudh.blog//sitemap.xml

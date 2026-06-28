@@ -7,7 +7,7 @@ export const site = {
   name: "Sai Anirudh Siddi",
   role: "AI Engineer",
   // 👇 CHANGE THIS to your real domain once you have it (used for SEO, sitemap, RSS)
-  url: "https://saianirudhsiddi.com",
+  url: "https://www.saianirudh.blog/",
   description:
     "Sai Anirudh Siddi — AI Engineer working on ML systems, LLMs, model evaluation and SaaS. Projects, writing, and experience.",
   email: "siddish@mail.uc.edu",
