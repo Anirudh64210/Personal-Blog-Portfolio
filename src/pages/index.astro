@@ -98,7 +98,7 @@ const schema = {
   <section class="block" id="blog"><div class="wrap">
     <span class="label" data-text="// 03 — TRANSMISSIONS"></span>
     <h2 class="h2 reveal">From the notebook</h2>
-    <p class="lead reveal" style="margin-bottom:1.4rem">Notes from building ML systems — interpretability, probes, and the infra around them. Each tagged with how settled it is.</p>
+    <p class="lead reveal" style="margin-bottom:1.4rem">Notes from building - ML systems, AI,  interpretability, safety and the infra around them. Anything and Everything. Each tagged with how settled it is.</p>
     <ul class="posts reveal">
       {posts.map((p) => (
         <li><a href={`/blog/${p.id}`}>
@@ -167,14 +167,33 @@ const schema = {
       <div class="transmit reveal brackets">
         <span class="ey" style="color:var(--muted)">// transmission</span>
         <p class="big">Building<br>something?</p>
-        <p class="lead" style="margin-bottom:1.1rem">Open to AI / ML engineering roles and interesting collaborations. Tell me what you're building.</p>
-        <a class="mailto" href={`mailto:${site.email}`}>{site.email}</a>
+        <p class="lead" style="margin-bottom:1.1rem">Open to AI / ML engineering opportunities and interesting collaborations. Tell me what you're building.</p>
+        <a class="mailto copyEmail" href={`mailto:${site.email}`} data-email={site.email}>{site.email}</a>
       </div>
       <div class="socials reveal">
-        {socials.map((s) => (
-          <a href={s.href} target={s.href.startsWith("http") ? "_blank" : undefined} rel="noopener">{s.label} <span class="ar">↗</span></a>
-        ))}
-      </div>
+  {socials.map((s) => (
+    s.href.startsWith("mailto:") ? (
+      <a class="copyEmail" href={s.href} data-email={site.email}>
+        {s.label} <span class="ar">⧉</span>
+      </a>
+    ) : (
+      <a href={s.href} target="_blank" rel="noopener">{s.label} <span class="ar">↗</span></a>
+    )
+  ))}
+</div>
     </div>
   </div></section>
+  <script is:inline>
+  document.addEventListener('click', (e) => {
+    const el = e.target.closest('.copyEmail');
+    if (!el) return;
+    e.preventDefault();
+    const addr = el.dataset.email;
+    if (!el.dataset.label) el.dataset.label = el.innerHTML;   // remember original
+    navigator.clipboard?.writeText(addr).then(() => {
+      el.textContent = 'copied ✓';
+      setTimeout(() => (el.innerHTML = el.dataset.label), 1400);
+    }).catch(() => { window.location.href = 'mailto:' + addr; });
+  });
+</script>
 </Base>

@@ -5,7 +5,7 @@
 
 export const site = {
   name: "Sai Anirudh Siddi",
-  role: "AI Engineer",
+  role: "AI & Data Engineer",
   // 👇 CHANGE THIS to your real domain once you have it (used for SEO, sitemap, RSS)
   url: "https://www.saianirudh.blog/",
   description:
@@ -18,13 +18,13 @@ export const site = {
 
 export const hero = {
   eyebrow: "// engineer · ai · ml · data · saas",
-  tagline: "I build on ideas I find cool — and try out new things.",
+  tagline: "I build on ideas I find cool - and try out new things.",
 };
 
 // About terminal — [type, text]; type is "cmd" (prompt line) or "out" (output line)
 export const terminal: [("cmd" | "out"), string][] = [
   ["cmd", "whoami"],
-  ["out", "sai anirudh siddi — ai engineer"],
+  ["out", "sai anirudh siddi — ai & data engineer"],
   ["cmd", "cat focus.txt"],
   ["out", "ml systems, llms, models, eval and saas."],
   ["cmd", "cat now.txt"],
