@@ -1,6 +1,6 @@
 # https://www.saianirudh.blog/
 
-My personal site and blog — built with [Astro](https://astro.build).
+My personal site and blog - built with [Astro](https://astro.build).
 
 ## Develop
 
