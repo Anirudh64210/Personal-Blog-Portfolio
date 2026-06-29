@@ -6,10 +6,9 @@
 export const site = {
   name: "Sai Anirudh Siddi",
   role: "AI & Data Engineer",
-  // 👇 CHANGE THIS to your real domain once you have it (used for SEO, sitemap, RSS)
   url: "https://www.saianirudh.blog/",
   description:
-    "Sai Anirudh Siddi — AI Engineer working on ML systems, LLMs, model evaluation and SaaS. Projects, writing, and experience.",
+    "Sai Anirudh Siddi - AI Engineer working on ML systems, LLMs, model evaluation and SaaS. Projects, writing, and experience.",
   email: "siddish@mail.uc.edu",
   location: "Las Vegas, Nevada",
   coords: "36.17°N 115.14°W",
@@ -102,9 +101,9 @@ export const projects = [
 ];
 
 export const experience = [
-  { yr: "MAY — DEC 2025", role: "Data Engineer", org: "Great American Insurance — Predictive Analytics · 1M+ records, AI-assisted analytics", loc: "Ohio, USA" },
-  { yr: "AUG — NOV 2023", role: "Software Engineer", org: "DRDO — Digital Forensics · ingestion & validation pipelines", loc: "Hyderabad, IN" },
-  { yr: "MAY — SEP 2022", role: "Data Engineer", org: "Dsign Code LLC — IT · SQL/PL-SQL reporting across 20+ modules", loc: "Michigan, USA" },
+  { yr: "MAY — DEC 2025", role: "Data Engineer", org: "Great American Insurance -- Predictive Analytics · 1M+ records, AI-assisted analytics", loc: "Ohio, USA" },
+  { yr: "AUG — NOV 2023", role: "Software Engineer", org: "DRDO -- Digital Forensics · Ingestion & validation pipelines", loc: "Hyderabad, IN" },
+  { yr: "MAY — SEP 2022", role: "Data Engineer", org: "Dsign Code LLC -- IT · SQL/PL-SQL reporting across 20+ modules", loc: "Michigan, USA" },
 ];
 
 export const education = [
