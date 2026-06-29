@@ -4,6 +4,7 @@ description: "Lessons from building an AI exoplanet-detection pipeline on NASA K
 topic: "ml · nasa"
 planted: 2025-11-12
 backlinkLabel: "ExoSeeker"
+status: "mature"
 backlinkHref: "https://github.com/Anirudh64210"
 ---
 
