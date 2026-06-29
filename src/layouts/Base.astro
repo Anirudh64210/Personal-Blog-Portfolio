@@ -94,5 +94,9 @@ const bootJs = `const TERM_LINES=${JSON.stringify(termLines)};\n` + interactions
     </footer>
 
     <script is:inline set:html={bootJs}></script>
+    <script>
+  import { inject } from '@vercel/analytics';
+  inject();
+</script>
   </body>
 </html>
