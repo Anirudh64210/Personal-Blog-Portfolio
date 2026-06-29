@@ -2,7 +2,9 @@
 title: "From 0.50 to 0.88 AUROC with activation normalization"
 description: "Why normalizing residual-stream activations before a linear probe is the highest-leverage change for behavioral detection in LLMs."
 topic: "interpretability · calibration"
-planted: 2026-05-04
+planted: 2026-06-21
+backlinkLabel: "GlassBox"
+backlinkHref: "https://github.com/Anirudh64210/glassbox"
 ---
 
 Our first harmful-content probes scored no better than a coin flip. AUROC sat at 0.55, pure chance, even though the signal we wanted was clearly in the model somewhere. Logistic regression on the same activations was getting 0.89, so the signal was there. Raw diff-of-means just could not see it.

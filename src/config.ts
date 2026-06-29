@@ -1,5 +1,5 @@
 // ───────────────────────────────────────────────────────────
-//  EDIT YOUR SITE HERE. Everything below feeds the homepage.
+//  EDIT SITE HERE. Everything below feeds the homepage.
 //  (Blog posts live in src/content/blog/*.md — see README.)
 // ───────────────────────────────────────────────────────────
 
@@ -60,7 +60,7 @@ export const press = [
   },
 ];
 
-// Each card links straight to its GitHub repo. Replace `repo` with the real URLs.
+// Each card links straight to its GitHub repo.
 export const projects = [
   {
     num: 1,
@@ -69,7 +69,7 @@ export const projects = [
     summary:
       "Mechanistic interpretability for medical LLMs (Gemma 3) — surfacing 15+ SAE feature activations with live uncertainty & harmfulness tracking during inference.",
     tags: ["PyTorch", "LLMs", "FastAPI"],
-    repo: "https://github.com/Anirudh64210",
+    repo: "https://github.com/Anirudh64210/glassbox",
   },
   {
     num: 2,
@@ -78,7 +78,7 @@ export const projects = [
     summary:
       "AI exoplanet detection on NASA Kepler data, >90% accuracy. Won Best Use of NASA Data and advanced to the global NASA stage.",
     tags: ["PyTorch", "scikit-learn"],
-    repo: "https://github.com/Anirudh64210",
+    repo: "https://github.com/Anirudh64210/mlp_model",
   },
   {
     num: 3,
@@ -87,7 +87,7 @@ export const projects = [
     summary:
       "End-to-end IoT + ML robotics with real-time control, >90% accuracy. 1st place overall at Ohio's largest hackathon (800+ participants).",
     tags: ["Python", "C++", "IoT/ML"],
-    repo: "https://github.com/Anirudh64210",
+    repo: "https://github.com/needlehelp",
   },
   {
     num: 4,
