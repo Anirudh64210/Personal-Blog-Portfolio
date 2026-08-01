@@ -34,7 +34,7 @@ const schema = {
   dateModified: (d.tended ?? d.planted).toISOString(),
   author: { "@type": "Person", name: site.name, url: site.url },
   mainEntityOfPage: canonical,
-  image: new URL("/portrait.jpg", site.url).href,
+  image: new URL(d.ogImage ?? "/og/default.png", site.url).href,
   wordCount: (post.body ?? "").split(/\s+/).filter(Boolean).length,
   timeRequired: `PT${mins}M`,
 };
@@ -42,6 +42,7 @@ const schema = {
 <Base
   title={`${d.title} — ${site.name}`}
   description={d.description}
+  image={d.ogImage ?? "/og/default.png"}
   type="article"
   published={d.planted.toISOString()}
   modified={(d.tended ?? d.planted).toISOString()}

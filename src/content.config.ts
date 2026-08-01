@@ -12,6 +12,7 @@ const blog = defineCollection({
     status: z.enum(["seed", "sprout", "mature", "decaying"]).optional(),
     backlinkLabel: z.string().optional(),
     backlinkHref: z.string().optional(),
+    ogImage: z.string().optional(),
     draft: z.boolean().default(false),
   }),
 });
