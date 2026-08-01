@@ -65,6 +65,17 @@ if(term)ioTerm.observe(term);
 document.querySelectorAll('.chip').forEach(c=>c.addEventListener('mouseenter',()=>new Scramble(c,{speed:0.8,spread:16,dur:6,intensity:0.18}).set(c.dataset.text)));
 if(!reduced){const _chips=[...document.querySelectorAll('.chip')];setInterval(()=>{const c=_chips[Math.floor(Math.random()*_chips.length)];if(c){c.classList.add('lit');setTimeout(()=>c.classList.remove('lit'),520);}},2200);}
 
+/* article body stages in block by block; anything already on screen shows at once */
+(function(){
+  const kids=document.querySelectorAll('.prose.staged > *');
+  if(!kids.length)return;
+  if(reduced){kids.forEach(el=>el.classList.add('in'));return;}
+  const ioBody=new IntersectionObserver((es)=>{
+    es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');ioBody.unobserve(e.target);}});
+  },{threshold:0,rootMargin:'0px 0px 14% 0px'});
+  kids.forEach(el=>ioBody.observe(el));
+})();
+
 /* table of contents scrollspy — highlights the section you're reading */
 (function(){
   const links=[...document.querySelectorAll('.toc a[data-toc]')];

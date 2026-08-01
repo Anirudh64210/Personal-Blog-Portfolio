@@ -160,6 +160,10 @@ footer{padding-block:2rem;color:var(--faint);font-family:var(--mono);font-size:.
 .foot-in{display:flex;justify-content:space-between;gap:1rem;flex-wrap:wrap}
 .reveal{opacity:0;transform:translateY(12px);transition:opacity .55s ease,transform .55s ease}
 .reveal.in{opacity:1;transform:none}
+/* article body stages in per block, so the top of the post is never blank on load */
+.prose.staged>*{opacity:0;transform:translateY(9px);transition:opacity .42s ease,transform .42s ease}
+.prose.staged>.in{opacity:1;transform:none}
+@media(prefers-reduced-motion:reduce){.prose.staged>*{opacity:1;transform:none;transition:none}}
 
 @media(max-width:760px){.about-grid,.contact{grid-template-columns:1fr}.rec li{grid-template-columns:1fr;gap:.3rem}.rec .loc2{display:none}nav{display:none}}
 @media(prefers-reduced-motion:reduce){.searchlight,.scan,.scrollhint span,.badge .dot,.live,.mthumb .mk{animation:none!important}}

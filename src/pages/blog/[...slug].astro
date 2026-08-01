@@ -60,9 +60,10 @@ const schema = {
           <a class="backlink" href={d.backlinkHref} target="_blank" rel="noopener">↩ {d.backlinkLabel ?? "source"}</a>
         )}
       </div>
-      <div class="prose reveal">
+      <div class="prose staged">
         <Content />
       </div>
+      <noscript><style>.prose.staged>*{opacity:1;transform:none}</style></noscript>
       {(newer || older) && (
         <nav class="postnav reveal" aria-label="More posts">
           {newer ? (
