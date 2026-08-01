@@ -1,8 +1,7 @@
 ---
 import Base from "../layouts/Base.astro";
-import GrowthBadge from "../components/GrowthBadge.astro";
 import ProjectCard from "../components/ProjectCard.astro";
-import { computeStatus } from "../lib/status";
+import PostList from "../components/PostList.astro";
 import {
   site, hero, terminal, facts, socials, press,
   projects, experience, education, skills,
@@ -14,7 +13,7 @@ const posts = (await getCollection("blog", ({ data }) => !data.draft)).sort(
     (b.data.tended ?? b.data.planted).valueOf() -
     (a.data.tended ?? a.data.planted).valueOf()
 );
-const fmt = (d: Date) => d.toLocaleDateString("en-US", { month: "short", year: "numeric" });
+const latest = posts.slice(0, 4);
 
 const schema = {
   "@context": "https://schema.org",
@@ -97,20 +96,10 @@ const schema = {
   <!-- 03 TRANSMISSIONS -->
   <section class="block" id="blog"><div class="wrap">
     <span class="label" data-text="// 03 — TRANSMISSIONS"></span>
-    <h2 class="h2 reveal">From the notebook</h2>
+    <h2 class="h2 reveal">Latest blogs</h2>
     <p class="lead reveal" style="margin-bottom:1.4rem">Notes from building - Anything and Everything. Each tagged with how settled it is.</p>
-    <ul class="posts reveal">
-      {posts.map((p) => (
-        <li><a href={`/blog/${p.id}`}>
-          <span class="t">{p.data.title}</span>
-          <span class="d">{fmt(p.data.tended ?? p.data.planted)}</span>
-          <span class="meta">
-            <GrowthBadge status={p.data.status ?? computeStatus(p.data.planted, p.data.tended)} />
-            <span class="d">{p.data.topic}</span>
-          </span>
-        </a></li>
-      ))}
-    </ul>
+    <PostList posts={latest} />
+    <div class="posts-more reveal"><a class="btn" href="/blog">All writing ↗</a></div>
   </div></section>
 
   <!-- 04 FIELD WORK -->

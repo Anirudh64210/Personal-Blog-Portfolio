@@ -65,5 +65,21 @@ if(term)ioTerm.observe(term);
 document.querySelectorAll('.chip').forEach(c=>c.addEventListener('mouseenter',()=>new Scramble(c,{speed:0.8,spread:16,dur:6,intensity:0.18}).set(c.dataset.text)));
 if(!reduced){const _chips=[...document.querySelectorAll('.chip')];setInterval(()=>{const c=_chips[Math.floor(Math.random()*_chips.length)];if(c){c.classList.add('lit');setTimeout(()=>c.classList.remove('lit'),520);}},2200);}
 
+/* table of contents scrollspy — highlights the section you're reading */
+(function(){
+  const links=[...document.querySelectorAll('.toc a[data-toc]')];
+  if(!links.length)return;
+  const map=new Map();
+  links.forEach(a=>{const h=document.getElementById(a.dataset.toc);if(h)map.set(h,a);});
+  if(!map.size)return;
+  let active=null;
+  const mark=a=>{if(a===active)return;if(active)active.classList.remove('on');a.classList.add('on');active=a;};
+  const ioToc=new IntersectionObserver((es)=>{
+    es.forEach(e=>{if(e.isIntersecting)mark(map.get(e.target));});
+  },{rootMargin:'-20% 0px -70% 0px',threshold:0});
+  map.forEach((a,h)=>ioToc.observe(h));
+  mark(links[0]);
+})();
+
 function tick(){const t=new Date().toLocaleTimeString('en-GB',{hour12:false});const a=document.getElementById('clock'),b=document.getElementById('clock2');if(a)a.textContent=t;if(b)b.textContent=t;}
 tick();setInterval(tick,1000);

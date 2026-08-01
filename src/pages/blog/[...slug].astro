@@ -2,18 +2,26 @@
 import Base from "../../layouts/Base.astro";
 import GrowthBadge from "../../components/GrowthBadge.astro";
 import { computeStatus } from "../../lib/status";
+import { readingTime } from "../../lib/readingTime";
 import { site } from "../../config";
 import { getCollection, render } from "astro:content";
 
 export async function getStaticPaths() {
-  const posts = await getCollection("blog", ({ data }) => !data.draft);
-  return posts.map((post) => ({ params: { slug: post.id }, props: { post } }));
+  const posts = (await getCollection("blog", ({ data }) => !data.draft)).sort(
+    (a, b) => (b.data.tended ?? b.data.planted).valueOf() - (a.data.tended ?? a.data.planted).valueOf()
+  );
+  return posts.map((post, i) => ({
+    params: { slug: post.id },
+    props: { post, newer: posts[i - 1] ?? null, older: posts[i + 1] ?? null },
+  }));
 }
 
-const { post } = Astro.props;
-const { Content } = await render(post);
+const { post, newer, older } = Astro.props;
+const { Content, headings } = await render(post);
+const toc = headings.filter((h) => h.depth === 2);
 const d = post.data;
 const status = d.status ?? computeStatus(d.planted, d.tended);
+const mins = readingTime(post.body);
 const long = (x: Date) => x.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
 const canonical = new URL(`/blog/${post.id}`, site.url).href;
 
@@ -27,6 +35,8 @@ const schema = {
   author: { "@type": "Person", name: site.name, url: site.url },
   mainEntityOfPage: canonical,
   image: new URL("/portrait.jpg", site.url).href,
+  wordCount: (post.body ?? "").split(/\s+/).filter(Boolean).length,
+  timeRequired: `PT${mins}M`,
 };
 ---
 <Base
@@ -38,20 +48,51 @@ const schema = {
   schema={schema}
 >
   <main>
+    <div class={`article-shell${toc.length > 0 ? " has-toc" : ""}`}>
     <article class="article">
       <span class="label" data-text={`// ${d.topic}`}></span>
       <h1 class="h1">{d.title}</h1>
       <div class="ameta">
         <GrowthBadge status={status} />
         <span>Planted {long(d.planted)}{d.tended && ` · Tended ${long(d.tended)}`}</span>
+        <span class="rt">{mins} min read</span>
         {d.backlinkHref && (
           <a class="backlink" href={d.backlinkHref} target="_blank" rel="noopener">↩ {d.backlinkLabel ?? "source"}</a>
         )}
       </div>
       <div class="prose reveal">
         <Content />
-        <a class="allback" href="/blog">← all transmissions</a>
       </div>
+      {(newer || older) && (
+        <nav class="postnav reveal" aria-label="More posts">
+          {newer ? (
+            <a class="pn pn--newer" href={`/blog/${newer.id}`}>
+              <span class="pn-k">← newer</span>
+              <span class="pn-t">{newer.data.title}</span>
+            </a>
+          ) : <span class="pn pn--empty" aria-hidden="true"></span>}
+          {older && (
+            <a class="pn pn--older" href={`/blog/${older.id}`}>
+              <span class="pn-k">older →</span>
+              <span class="pn-t">{older.data.title}</span>
+            </a>
+          )}
+        </nav>
+      )}
+      <a class="allback" href="/blog">← all transmissions</a>
     </article>
+    {toc.length > 0 && (
+      <aside class="toc" aria-label="On this page">
+        <div class="toc-in">
+          <span class="toc-h">// contents</span>
+          <ul>
+            {toc.map((h) => (
+              <li><a href={`#${h.slug}`} data-toc={h.slug}>{h.text}</a></li>
+            ))}
+          </ul>
+        </div>
+      </aside>
+    )}
+    </div>
   </main>
 </Base>
