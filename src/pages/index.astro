@@ -2,6 +2,7 @@
 import Base from "../layouts/Base.astro";
 import ProjectCard from "../components/ProjectCard.astro";
 import PostList from "../components/PostList.astro";
+import RecordList from "../components/RecordList.astro";
 import {
   site, hero, terminal, facts, socials, press,
   projects, experience, education, skills,
@@ -35,7 +36,7 @@ const schema = {
         <span>FILE NO. <b>{site.fileNo}</b></span>
         <span>LAS VEGAS // <b>{site.coords}</b></span>
         <span>LOCAL <b id="clock">--:--:--</b></span>
-        <span><i class="live"></i>STATUS <b style="color:var(--accent)">AVAILABLE</b></span>
+        <span><i class="live"></i>STATUS <b class="u-accent">AVAILABLE</b></span>
       </div>
       <span class="ey">{hero.eyebrow}</span>
       <h1 class="name" data-text={site.name.toUpperCase()}></h1>
@@ -54,12 +55,12 @@ const schema = {
 
   <!-- 01 WHO -->
   <section class="block" id="about"><div class="wrap">
-    <span class="label" data-text="// 01 — WHO"></span>
+    <span class="label" data-text="// 01 · WHO"></span>
     <div class="about-grid">
       <div class="reveal">
         <div class="term">
           <div class="term-bar"><i></i><i></i><i></i><span class="term-title">anirudh@vegas: ~/about</span></div>
-          <div class="term-body" id="term"></div>
+          <div class="term-body" id="term" data-lines={JSON.stringify(terminal.map(([t, x]) => ({ t, x })))}></div>
         </div>
       </div>
       <div class="reveal">
@@ -75,7 +76,7 @@ const schema = {
 
   <!-- 02 APPEARED ON -->
   <section class="block" id="press"><div class="wrap">
-    <span class="label" data-text="// 02 — APPEARED ON"></span>
+    <span class="label" data-text="// 02 · APPEARED ON"></span>
     <h2 class="h2 reveal">In the press</h2>
     <div class="reveal press-win">
       <div class="term">
@@ -95,48 +96,40 @@ const schema = {
 
   <!-- 03 TRANSMISSIONS -->
   <section class="block" id="blog"><div class="wrap">
-    <span class="label" data-text="// 03 — TRANSMISSIONS"></span>
+    <span class="label" data-text="// 03 · TRANSMISSIONS"></span>
     <h2 class="h2 reveal">Latest blogs</h2>
-    <p class="lead reveal" style="margin-bottom:1.4rem">Notes from building - Anything and Everything. Each tagged with how settled it is.</p>
+    <p class="lead reveal u-lead-gap">Notes from building - Anything and Everything. Each tagged with how settled it is.</p>
     <PostList posts={latest} />
     <div class="posts-more reveal"><a class="btn" href="/blog">All writing ↗</a></div>
   </div></section>
 
   <!-- 04 FIELD WORK -->
   <section class="block" id="work"><div class="wrap">
-    <span class="label" data-text="// 04 — FIELD WORK"></span>
+    <span class="label" data-text="// 04 · FIELD WORK"></span>
     <h2 class="h2 reveal">Selected projects</h2>
-    <p class="lead reveal" style="margin-bottom:1rem">Each card opens its GitHub repo, where the README breaks down the build.</p>
+    <p class="lead reveal u-lead-gap-sm">Each card opens its GitHub repo, where the README breaks down the build.</p>
     <div class="work-grid">
-      {projects.map((p) => <ProjectCard p={p} />)}
+      {projects.map((p, i) => <ProjectCard p={p} num={i + 1} />)}
     </div>
   </div></section>
 
   <!-- 05 SERVICE RECORD -->
   <section class="block" id="experience"><div class="wrap">
-    <span class="label" data-text="// 05 — SERVICE RECORD"></span>
+    <span class="label" data-text="// 05 · SERVICE RECORD"></span>
     <h2 class="h2 reveal">Experience</h2>
-    <ul class="rec reveal">
-      {experience.map((e) => (
-        <li><span class="yr">{e.yr}</span><span><span class="role">{e.role}</span><br><span class="org">{e.org}</span></span><span class="loc2">{e.loc}</span></li>
-      ))}
-    </ul>
+    <RecordList items={experience} />
   </div></section>
 
   <!-- 06 EDUCATION -->
   <section class="block" id="education"><div class="wrap">
-    <span class="label" data-text="// 06 — EDUCATION"></span>
+    <span class="label" data-text="// 06 · EDUCATION"></span>
     <h2 class="h2 reveal">Education</h2>
-    <ul class="rec reveal">
-      {education.map((e) => (
-        <li><span class="yr">{e.yr}</span><span><span class="role">{e.role}</span><br><span class="org">{e.org}</span></span><span class="loc2">{e.loc}</span></li>
-      ))}
-    </ul>
+    <RecordList items={education} />
   </div></section>
 
   <!-- 07 LOADOUT -->
   <section class="block" id="skills"><div class="wrap">
-    <span class="label" data-text="// 07 — LOADOUT"></span>
+    <span class="label" data-text="// 07 · LOADOUT"></span>
     <h2 class="h2 reveal">Skills</h2>
     <div class="skills-head reveal"><span class="pmt">$</span> ./scan --skills</div>
     <div class="skillset reveal">
@@ -151,12 +144,12 @@ const schema = {
 
   <!-- 08 OPEN A CHANNEL -->
   <section class="block" id="contact"><div class="wrap">
-    <span class="label" data-text="// 08 — OPEN A CHANNEL"></span>
+    <span class="label" data-text="// 08 · OPEN A CHANNEL"></span>
     <div class="contact">
       <div class="transmit reveal brackets">
-        <span class="ey" style="color:var(--muted)">// transmission</span>
+        <span class="ey u-muted">// transmission</span>
         <p class="big">Building<br>something?</p>
-        <p class="lead" style="margin-bottom:1.1rem">Open to AI / ML & Data engineering opportunities and interesting collaborations. Tell me what you're building.</p>
+        <p class="lead u-lead-gap-xs">Open to AI / ML & Data engineering opportunities and interesting collaborations. Tell me what you're building.</p>
         <a class="mailto copyEmail" href={`mailto:${site.email}`} data-email={site.email}>{site.email}</a>
       </div>
       <div class="socials reveal">
@@ -172,7 +165,7 @@ const schema = {
 </div>
     </div>
   </div></section>
-  <script is:inline>
+  <script>
   document.addEventListener('click', (e) => {
     const el = e.target.closest('.copyEmail');
     if (!el) return;

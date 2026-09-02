@@ -11,7 +11,8 @@ const blog = defineCollection({
     tended: z.coerce.date().optional(),
     status: z.enum(["seed", "sprout", "mature", "decaying"]).optional(),
     backlinkLabel: z.string().optional(),
-    backlinkHref: z.string().optional(),
+    // .url() so a `javascript:` value can never reach an href
+    backlinkHref: z.string().url().optional(),
     ogImage: z.string().optional(),
     draft: z.boolean().default(false),
   }),

@@ -43,7 +43,8 @@ document.querySelectorAll('.label[data-text]').forEach(l=>ioLabel.observe(l));
 document.querySelectorAll('.proj').forEach(card=>{const code=card.querySelector('.code');
   card.addEventListener('mouseenter',()=>new Scramble(code,{speed:0.5,spread:30,dur:12,intensity:0.12}).set(code.dataset.text));});
 
-/* TERM_LINES injected by layout */
+/* The terminal script rides on #term's data-lines attribute rather than an
+   inline <script>, so this file can be bundled and the page needs no inline JS. */
 async function runTerminal(host){
   if(reduced){host.innerHTML=TERM_LINES.map(l=>l.t==='cmd'?'<div class="line"><span class="pmt">$</span> '+l.x+'</div>':'<div class="line out">'+l.x+'</div>').join('')+'<div class="line"><span class="pmt">$</span> <span class="cur"></span></div>';return;}
   host.innerHTML='';
@@ -58,7 +59,9 @@ async function runTerminal(host){
   }
   const end=document.createElement('div');end.className='line';end.innerHTML='<span class="pmt">$</span> <span class="cur"></span>';host.appendChild(end);
 }
-const term=document.getElementById('term');let termRun=false;
+const term=document.getElementById('term');
+const TERM_LINES=term?JSON.parse(term.dataset.lines||'[]'):[];
+let termRun=false;
 const ioTerm=new IntersectionObserver((es)=>{es.forEach(e=>{if(e.isIntersecting&&!termRun){termRun=true;runTerminal(term);ioTerm.unobserve(e.target);}});},{threshold:.35});
 if(term)ioTerm.observe(term);
 
@@ -67,16 +70,19 @@ if(!reduced){const _chips=[...document.querySelectorAll('.chip')];setInterval(()
 
 /* article body stages in block by block; anything already on screen shows at once */
 (function(){
-  const kids=document.querySelectorAll('.prose.staged > *');
+  const prose=document.querySelector('.prose.staged');
+  if(!prose)return;
+  prose.classList.add('js');
+  const kids=prose.children;
   if(!kids.length)return;
-  if(reduced){kids.forEach(el=>el.classList.add('in'));return;}
+  if(reduced){[...kids].forEach(el=>el.classList.add('in'));return;}
   const ioBody=new IntersectionObserver((es)=>{
     es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');ioBody.unobserve(e.target);}});
   },{threshold:0,rootMargin:'0px 0px 14% 0px'});
-  kids.forEach(el=>ioBody.observe(el));
+  [...kids].forEach(el=>ioBody.observe(el));
 })();
 
-/* table of contents scrollspy — highlights the section you're reading */
+/* table of contents scrollspy: highlights the section you're reading */
 (function(){
   const links=[...document.querySelectorAll('.toc a[data-toc]')];
   if(!links.length)return;

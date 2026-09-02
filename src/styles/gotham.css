@@ -107,7 +107,7 @@ section{position:relative;z-index:2}
 .proj:hover p{color:#33342f}
 .proj:hover .tags span{color:#3a3a36;border-color:rgba(0,0,0,.18)}
 .proj:hover .mthumb{background:#fff;color:#0A0A0A;border-color:rgba(0,0,0,.12)}
-/* morse numeral thumb — static by default, gentle thump only on hover */
+/* morse numeral thumb: static by default, gentle thump only on hover */
 .mthumb{aspect-ratio:16/9;background:#070708;border:1px solid var(--border);border-radius:3px;display:flex;align-items:center;justify-content:center;gap:9px;overflow:hidden;margin-bottom:.25rem;color:var(--accent)}
 .mthumb .mk{background:currentColor;opacity:.5}
 .mthumb .dot{width:9px;height:9px;border-radius:50%}
@@ -120,10 +120,42 @@ section{position:relative;z-index:2}
 .proj .tags{display:flex;gap:.5rem;flex-wrap:wrap;margin-top:auto}
 .proj .tags span{font-family:var(--mono);font-size:.55rem;color:var(--faint);border:1px solid var(--border);padding:.2em .5em;border-radius:2px;letter-spacing:.06em;text-transform:uppercase}
 .proj .open{font-family:var(--mono);font-size:.62rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-top:.45rem}
+/* not shipped yet: a plain tile, so it must not read as clickable */
+.proj--soon{border-style:dashed;cursor:default}
+.proj--soon:hover{transform:none;background:var(--surface);border-color:var(--border);color:inherit}
+.proj--soon:hover .code{color:var(--accent)}
+.proj--soon:hover h3{color:var(--text)}
+.proj--soon:hover p{color:var(--muted)}
+.proj--soon:hover .tags span{color:var(--faint);border-color:var(--border)}
+.proj--soon:hover .mthumb{background:#070708;color:var(--accent);border-color:var(--border)}
+.proj--soon .open{color:var(--accent)}
+.proj--soon .open::before{content:"";display:inline-block;width:6px;height:6px;border-radius:50%;background:currentColor;margin-right:.5em;vertical-align:middle;animation:pulse 2s ease-in-out infinite}
 
 .rec{list-style:none;border-top:1px solid var(--border)}
-.rec li{display:grid;grid-template-columns:auto 1fr auto;gap:1.4rem;align-items:baseline;padding:.95rem 0;border-bottom:1px solid var(--border)}
-.rec .yr{font-family:var(--mono);font-size:.7rem;color:var(--faint);letter-spacing:.06em;white-space:nowrap}
+.rec li{display:grid;grid-template-columns:auto auto 1fr auto;gap:1.4rem;align-items:baseline;padding:.95rem 0;border-bottom:1px solid var(--border)}
+/* logo tile: a light chip, a full-bleed brand image, or a tinted monogram */
+.rec .lg{--lg:var(--muted);align-self:center;display:grid;place-items:center;width:56px;height:56px;flex:none;border-radius:9px;overflow:hidden;transition:transform .25s,box-shadow .25s}
+.rec .lg img{width:100%;height:100%}
+.rec .lg--light{background:#fff;padding:5px;box-shadow:inset 0 0 0 1px rgba(255,255,255,.16)}
+.rec .lg--light img{object-fit:contain}
+.rec .lg--full{box-shadow:inset 0 0 0 1px rgba(255,255,255,.14)}
+.rec .lg--full img{object-fit:cover}
+.rec .lg--mark{background:linear-gradient(155deg,color-mix(in srgb,var(--lg) 18%,transparent),color-mix(in srgb,var(--lg) 5%,transparent));box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--lg) 28%,transparent)}
+/* per-org tint: drives the monogram colour and the tile's hover glow.
+   Lives here rather than in config so no row needs an inline style attribute. */
+.rec .lg-gaig{--lg:#5B8FD6}
+.rec .lg-drdo{--lg:#E4933A}
+.rec .lg-dsign{--lg:#3FB8A6}
+.rec .lg-handshake{--lg:#D4FB54}
+.rec .lg-uc{--lg:#E8434F}
+.rec .lg-jntu{--lg:#8E9BF0}
+.rec .lg-mark{font-family:var(--mono);font-size:.85rem;font-weight:600;letter-spacing:.06em;color:var(--lg);line-height:1}
+.rec li:hover .lg{transform:translateY(-2px);box-shadow:0 6px 18px -8px color-mix(in srgb,var(--lg) 70%,transparent),inset 0 0 0 1px color-mix(in srgb,var(--lg) 55%,transparent)}
+.rec .rec-main{min-width:0}
+/* Each li is its own grid, so the year column would otherwise size per row and
+   the role text would start at a different x wherever a label is longer.
+   The floor keeps every row (and both sections) on one edge. */
+.rec .yr{font-family:var(--mono);font-size:.7rem;color:var(--faint);letter-spacing:.06em;white-space:nowrap;min-width:7.5rem}
 .rec .role{font-family:var(--disp);font-weight:500;text-transform:uppercase;font-size:1.12rem;letter-spacing:.01em}
 .rec .org{color:var(--muted);font-size:.88rem}
 .rec .loc2{font-family:var(--mono);font-size:.63rem;color:var(--faint);text-transform:uppercase;letter-spacing:.08em;white-space:nowrap}
@@ -145,7 +177,7 @@ section{position:relative;z-index:2}
 .socials a{display:flex;justify-content:space-between;align-items:center;padding:.8rem 0;border-bottom:1px solid var(--border);font-family:var(--mono);font-size:.76rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);transition:.18s}
 .socials a:hover{color:var(--accent);padding-left:.5rem}.socials a .ar{color:var(--faint)}.socials a:hover .ar{color:var(--accent)}
 
-/* skills / loadout — quirky pills */
+/* skills / loadout: quirky pills */
 .skills-head{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin-bottom:1.5rem}
 .skills-head .pmt{color:var(--accent)}
 .skillset{display:grid;grid-template-columns:auto 1fr;gap:1rem 1.6rem;align-items:start}
@@ -161,11 +193,11 @@ footer{padding-block:2rem;color:var(--faint);font-family:var(--mono);font-size:.
 .reveal{opacity:0;transform:translateY(12px);transition:opacity .55s ease,transform .55s ease}
 .reveal.in{opacity:1;transform:none}
 /* article body stages in per block, so the top of the post is never blank on load */
-.prose.staged>*{opacity:0;transform:translateY(9px);transition:opacity .42s ease,transform .42s ease}
-.prose.staged>.in{opacity:1;transform:none}
-@media(prefers-reduced-motion:reduce){.prose.staged>*{opacity:1;transform:none;transition:none}}
+.prose.staged.js>*{opacity:0;transform:translateY(9px);transition:opacity .42s ease,transform .42s ease}
+.prose.staged.js>.in{opacity:1;transform:none}
+@media(prefers-reduced-motion:reduce){.prose.staged.js>*{opacity:1;transform:none;transition:none}}
 
-@media(max-width:760px){.about-grid,.contact{grid-template-columns:1fr}.rec li{grid-template-columns:1fr;gap:.3rem}.rec .loc2{display:none}nav{display:none}}
+@media(max-width:760px){.about-grid,.contact{grid-template-columns:1fr}.rec li{grid-template-columns:auto 1fr;gap:.15rem 1rem;align-items:center}.rec .lg{grid-row:span 2;width:48px;height:48px}.rec .yr{grid-column:2;align-self:end;min-width:0}.rec .rec-main{grid-column:2;align-self:start}.rec .loc2{display:none}nav{display:none}}
 @media(prefers-reduced-motion:reduce){.searchlight,.scan,.scrollhint span,.badge .dot,.live,.mthumb .mk{animation:none!important}}
 
 /* ============ blog post: article + prose ============ */
@@ -198,11 +230,16 @@ main{position:relative;z-index:2}
 .logos img:hover{opacity:1}
 .logos .cap{flex-basis:100%;text-align:center;font-family:var(--mono);font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;color:var(--faint)}
 
-/* brand tiles — small colour-accurate badges */
+/* brand tiles: small colour-accurate badges */
 .logotiles{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:.55rem;margin:1.9em 0}
 .logotile{display:inline-flex;align-items:center;gap:.45rem;padding:.42rem .72rem .42rem .55rem;border-radius:5px;box-shadow:inset 0 0 0 1px rgba(255,255,255,.16);font-family:var(--mono);font-size:.6rem;font-weight:500;letter-spacing:.11em;text-transform:uppercase;color:#fff;line-height:1;transition:.2s}
 .logotile:hover{transform:translateY(-2px);box-shadow:inset 0 0 0 1px rgba(255,255,255,.34)}
 .logotile img{height:15px;width:15px;margin:0;border:0;border-radius:0;filter:brightness(0) invert(1)}
+.logotile--claude{background:#D97757}
+.logotile--google{background:#4285F4}
+.logotile--meta{background:#0467DF}
+.logotile--qwen{background:#6950EF}
+.logotile--ollama{background:#000}
 .logotiles .cap{flex-basis:100%;text-align:center;font-family:var(--mono);font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;color:var(--faint);margin-top:.35rem}
 @media(max-width:520px){.logotile{font-size:.55rem;padding:.36rem .6rem .36rem .46rem}.logotile img{height:13px;width:13px}}
 .article .h1{font-family:var(--disp);font-weight:700;text-transform:uppercase;letter-spacing:.01em;font-size:clamp(1.9rem,4.6vw,2.9rem);line-height:1.04;margin-bottom:.7rem}
@@ -241,3 +278,31 @@ main{position:relative;z-index:2}
 .pn:hover .pn-k{color:var(--accent)}
 .pn-t{font-size:.94rem;font-weight:500;line-height:1.35}
 @media(max-width:600px){.postnav{grid-template-columns:1fr}.pn--older{text-align:left}.pn--empty{display:none}}
+
+/* utilities: replace what used to be inline style attributes */
+.u-accent{color:var(--accent)}
+.u-muted{color:var(--muted)}
+.u-lead-gap{margin-bottom:1.4rem}
+.u-lead-gap-sm{margin-bottom:1rem}
+.u-lead-gap-xs{margin-bottom:1.1rem}
+.u-narrow{max-width:760px;margin-inline:auto}
+
+/* prism syntax colours: class-based so code blocks need no inline styles,
+   matching the github-dark palette the posts were rendered with before. */
+.prose code[class*="language-"]{color:#E1E4E8}
+.prose .token.comment,.prose .token.prolog,.prose .token.cdata{color:#6A737D}
+.prose .token.doctype,.prose .token.punctuation,.prose .token.entity{color:#E1E4E8}
+.prose .token.keyword,.prose .token.operator,.prose .token.rule,
+.prose .token.important,.prose .token.atrule{color:#F97583}
+.prose .token.boolean,.prose .token.number,.prose .token.constant,
+.prose .token.symbol,.prose .token.function,.prose .token.class-name,
+.prose .token.property{color:#79B8FF}
+.prose .token.string,.prose .token.char,.prose .token.attr-value,
+.prose .token.regex{color:#9ECBFF}
+.prose .token.tag,.prose .token.selector,.prose .token.builtin{color:#85E89D}
+.prose .token.attr-name,.prose .token.variable,.prose .token.parameter{color:#FFAB70}
+.prose .token.deleted{color:#FDAEB7}
+.prose .token.inserted{color:#85E89D}
+.prose .token.namespace{opacity:.75}
+.prose .token.bold{font-weight:600}
+.prose .token.italic{font-style:italic}

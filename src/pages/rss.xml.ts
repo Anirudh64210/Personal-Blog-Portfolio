@@ -14,8 +14,8 @@ export async function GET(context: APIContext) {
     .map(
       (p) => `    <item>
       <title>${esc(p.data.title)}</title>
-      <link>${base}/blog/${p.id}</link>
-      <guid>${base}/blog/${p.id}</guid>
+      <link>${esc(`${base}/blog/${p.id}`)}</link>
+      <guid>${esc(`${base}/blog/${p.id}`)}</guid>
       <description>${esc(p.data.description)}</description>
       <pubDate>${(p.data.tended ?? p.data.planted).toUTCString()}</pubDate>
     </item>`
@@ -24,8 +24,8 @@ export async function GET(context: APIContext) {
   const xml = `<?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0">
   <channel>
-    <title>${esc(site.name)} — Writing</title>
-    <link>${base}/blog</link>
+    <title>${esc(site.name)} · Writing</title>
+    <link>${esc(`${base}/blog`)}</link>
     <description>${esc(site.description)}</description>
     <language>en-us</language>
 ${items}

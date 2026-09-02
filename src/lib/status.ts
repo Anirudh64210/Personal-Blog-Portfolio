@@ -14,8 +14,8 @@ export function computeStatus(planted: Date, tended?: Date): Status {
 }
 
 export const STATUS_TIP: Record<Status, string> = {
-  seed: "New, under a year old — still rough",
-  sprout: "Growing — revised over time",
+  seed: "New, under a year old, still rough",
+  sprout: "Growing, revised over time",
   mature: "Well-developed and stable",
-  decaying: "Untouched in a while — read with care",
+  decaying: "Untouched in a while, read with care",
 };

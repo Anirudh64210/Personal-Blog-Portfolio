@@ -8,12 +8,12 @@ const posts = (await getCollection("blog", ({ data }) => !data.draft)).sort(
   (a, b) => (b.data.tended ?? b.data.planted).valueOf() - (a.data.tended ?? a.data.planted).valueOf()
 );
 ---
-<Base title={`Writing — ${site.name}`} description={`Notes and essays by ${site.name} on ML systems, interpretability, and AI engineering.`}>
+<Base title={`Writing · ${site.name}`} description={`Notes and essays by ${site.name} on ML systems, interpretability, and AI engineering.`}>
   <main>
-    <section class="block blog-index"><div class="wrap" style="max-width:760px;margin-inline:auto">
+    <section class="block blog-index"><div class="wrap u-narrow">
       <span class="label" data-text="// transmissions"></span>
       <h1 class="h2 reveal">From the notebook</h1>
-      <p class="lead reveal" style="margin-bottom:1.4rem">Everything I've written so far. Newest first.</p>
+      <p class="lead reveal u-lead-gap">Everything I've written so far. Newest first.</p>
       <PostList posts={posts} />
       <a class="allback" href="/#blog">← back home</a>
     </div></section>

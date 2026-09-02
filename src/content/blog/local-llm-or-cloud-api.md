@@ -34,11 +34,11 @@ Wouldn't you want that? Of course you'd want that.
 What these large LLMs are amazing at is throughput, the sheer number of tokens they push per second, and the quality of what comes out. Whereas say if I decide to build an application with a local lightweight LLM, I'm bound by the machine it runs on. VRAM or unified memory decides which model even fits. Quantization decides how much quality I trade away to make it fit. And memory bandwidth, not raw compute, is what caps tokens per second after that. And these smaller param models are good at giving quality outputs, especially text generation. Not great. But it gets the job done.
 
 <div class="logotiles">
-  <span class="logotile" style="background:#D97757"><img src="/logos/claude.svg" alt="" width="15" height="15" loading="lazy" />Claude</span>
-  <span class="logotile" style="background:#4285F4"><img src="/logos/google.svg" alt="" width="15" height="15" loading="lazy" />Gemma</span>
-  <span class="logotile" style="background:#0467DF"><img src="/logos/meta.svg" alt="" width="15" height="15" loading="lazy" />Llama</span>
-  <span class="logotile" style="background:#6950EF"><img src="/logos/qwen.svg" alt="" width="15" height="15" loading="lazy" />Qwen</span>
-  <span class="logotile" style="background:#000000"><img src="/logos/ollama.svg" alt="" width="15" height="15" loading="lazy" />Ollama</span>
+  <span class="logotile logotile--claude"><img src="/logos/claude.svg" alt="" width="15" height="15" loading="lazy" />Claude</span>
+  <span class="logotile logotile--google"><img src="/logos/google.svg" alt="" width="15" height="15" loading="lazy" />Gemma</span>
+  <span class="logotile logotile--meta"><img src="/logos/meta.svg" alt="" width="15" height="15" loading="lazy" />Llama</span>
+  <span class="logotile logotile--qwen"><img src="/logos/qwen.svg" alt="" width="15" height="15" loading="lazy" />Qwen</span>
+  <span class="logotile logotile--ollama"><img src="/logos/ollama.svg" alt="" width="15" height="15" loading="lazy" />Ollama</span>
   <span class="cap">Claude sits on the cloud side. Gemma, Llama and Qwen you can download and run yourself.</span>
 </div>
 

@@ -6,3 +6,12 @@ dist/
 *.log
 readme.txt
 DEPLOY.md
+
+# Source images dropped in the repo root: originals for logos, share cards and
+# the portrait. Nothing in the root is served, so the build never needs them.
+# The leading slash anchors this to the root only, so the processed files under
+# public/ stay tracked. Those MUST be committed or the deployed site 404s them.
+/*.png
+/*.jpg
+/*.jpeg
+/*.webp
