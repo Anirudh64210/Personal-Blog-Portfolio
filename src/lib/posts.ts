@@ -38,11 +38,18 @@ export function seriesPosts(name: string, all: Post[]): Post[] {
   return all.filter((p) => p.data.series?.name === name).sort((a, b) => a.data.series!.part - b.data.series!.part);
 }
 
-/** Category chips with counts, in the configured order, only categories that have posts. */
+/** Category chips with counts, only categories that have posts. Configured ones first in their
+ *  set order, then any new ones by post count (ties alphabetical). */
 export function categoryCounts(all: Post[]) {
-  return categories
-    .map((name) => ({ name, n: all.filter((p) => p.data.category === name).length }))
-    .filter((c) => c.n > 0);
+  const counts = new Map<string, number>();
+  for (const p of all) counts.set(p.data.category, (counts.get(p.data.category) ?? 0) + 1);
+  const rank = (name: string) => {
+    const i = categories.indexOf(name);
+    return i === -1 ? categories.length : i;
+  };
+  return [...counts]
+    .map(([name, n]) => ({ name, n }))
+    .sort((a, b) => rank(a.name) - rank(b.name) || b.n - a.n || a.name.localeCompare(b.name));
 }
 
 /** Posts grouped by year, newest year first, keeping the incoming order inside each year. */

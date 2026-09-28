@@ -1,7 +1,7 @@
 ---
 title: "Post title in sentence case"
 description: "One or two sentences. Used as the dek, meta description, card blurb and search snippet."
-category: "Interpretability"        # one of: Interpretability, LLMs, ML, Toki, Building
+category: "Interpretability"        # any name; new ones get a chip automatically
 topic: "interpretability · probes"  # optional short subtitle
 planted: 2026-10-01                 # publish date, drives sort order and LATEST
 tended: 2026-10-05                  # optional, last meaningful update

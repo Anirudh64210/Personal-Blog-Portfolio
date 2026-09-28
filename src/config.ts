@@ -124,8 +124,9 @@ export const nav = [
   { key: "contact", label: "Contact", href: "/#contact" },
 ];
 
-// Blog categories, in chip order. Adding one here also needs it in src/content.config.ts.
-export const categories = ["Interpretability", "LLMs", "ML", "Toki", "Building"] as const;
+// Preferred chip order for blog categories. Not a whitelist: a post may use any category,
+// and ones not listed here are added after these, most posts first.
+export const categories: readonly string[] = ["Interpretability", "LLMs", "ML", "Toki", "Building"];
 
 // Web résumé (/resume). Keep in sync with public/resume/Sai_Anirudh_Siddi_Resume.pdf.
 // No phone number and no GPA on the web version (the PDF keeps both).

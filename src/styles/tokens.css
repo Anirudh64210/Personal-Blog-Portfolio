@@ -109,14 +109,3 @@
   /* --amber, --on-amber, --brown, --edu, --proj, --pink unchanged */
 }
 
-/* Follow the system when the visitor has not chosen. The toggle writes data-theme explicitly. */
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) {
-    color-scheme: dark;
-    --bg: #1C1A23; --card: #262230; --stage: #2E2A38; --tile-wip: #302838; --sheet: #221F2B; --row-active: #342E40;
-    --panel: #131118; --on-panel: #F2EDE4; --on-panel-2: #CFC6D6;
-    --text: #F2EDE4; --text-body: #E6E0EA; --text-2: #CFC6D6; --muted: #A39CAD; --accent-text: #E09A6C; --link-hover: #8FB0F0;
-    --outline: #CFC7B8; --rule-soft: #4A4458; --shadow-color: #07060A; --tick-off: #4A4458;
-    --invert-bg: #F2EDE4; --invert-fg: #1C1A23; --blue: #8FB0F0;
-  }
-}

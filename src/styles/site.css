@@ -174,10 +174,6 @@ html:not(.js) .theme-toggle { display: none; }
 .theme-toggle .to-light { display: none; }
 :root[data-theme="dark"] .theme-toggle .to-dark { display: none; }
 :root[data-theme="dark"] .theme-toggle .to-light { display: inline-flex; }
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) .theme-toggle .to-dark { display: none; }
-  :root:not([data-theme="light"]) .theme-toggle .to-light { display: inline-flex; }
-}
 .theme-toggle span { align-items: center; gap: 8px; }
 .theme-toggle .to-dark { display: inline-flex; }
 
@@ -222,6 +218,7 @@ html:not(.js) .theme-toggle { display: none; }
 /* "keep exploring" link cards at the end of pages */
 .next-steps { margin-top: 56px; display: flex; flex-direction: column; gap: 12px; }
 .next-steps ul { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 14px; }
+.next-steps--3 ul { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 .next-steps a {
   display: flex; flex-direction: column; gap: 4px; height: 100%;
   padding: 16px 18px; background: var(--card); border: var(--border); border-radius: var(--radius-sm);
@@ -811,17 +808,6 @@ html:not(.js) .code-copy { display: none; }
 :root[data-theme="dark"] .token.property, :root[data-theme="dark"] .token.attr-name, :root[data-theme="dark"] .token.variable, :root[data-theme="dark"] .token.parameter { color: #E4A7D4; }
 :root[data-theme="dark"] .prose .logos img { filter: brightness(0) invert(1); opacity: .85; }
 :root[data-theme="dark"] .kind--experience { background: #F2EDE4; color: #1C1A23; }
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) .token.comment { color: #A39CAD; }
-  :root:not([data-theme="light"]) .token.number, :root:not([data-theme="light"]) .token.boolean, :root:not([data-theme="light"]) .token.constant { color: #E09A6C; }
-  :root:not([data-theme="light"]) .token.string, :root:not([data-theme="light"]) .token.char, :root:not([data-theme="light"]) .token.attr-value, :root:not([data-theme="light"]) .token.regex, :root:not([data-theme="light"]) .token.inserted { color: #86C06A; }
-  :root:not([data-theme="light"]) .token.keyword, :root:not([data-theme="light"]) .token.atrule, :root:not([data-theme="light"]) .token.important, :root:not([data-theme="light"]) .token.selector, :root:not([data-theme="light"]) .token.tag { color: #8FB0F0; }
-  :root:not([data-theme="light"]) .token.function, :root:not([data-theme="light"]) .token.class-name, :root:not([data-theme="light"]) .token.builtin { color: #F2C66D; }
-  :root:not([data-theme="light"]) .token.operator, :root:not([data-theme="light"]) .token.punctuation, :root:not([data-theme="light"]) .token.entity { color: #CFC6D6; }
-  :root:not([data-theme="light"]) .token.property, :root:not([data-theme="light"]) .token.attr-name, :root:not([data-theme="light"]) .token.variable, :root:not([data-theme="light"]) .token.parameter { color: #E4A7D4; }
-  :root:not([data-theme="light"]) .prose .logos img { filter: brightness(0) invert(1); opacity: .85; }
-  :root:not([data-theme="light"]) .kind--experience { background: #F2EDE4; color: #1C1A23; }
-}
 
 /* ---------- motion ---------- */
 @media (prefers-reduced-motion: no-preference) {

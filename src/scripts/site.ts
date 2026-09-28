@@ -5,13 +5,8 @@ const root = document.documentElement;
 
 // ---------- theme toggle ----------
 // data-theme is set before paint by the inline script in Base.astro when a choice is stored.
-// With no stored choice the page follows the system through the media query in tokens.css.
-const systemDark = window.matchMedia("(prefers-color-scheme: dark)");
-const resolved = (): "light" | "dark" => {
-  const t = root.getAttribute("data-theme");
-  if (t === "light" || t === "dark") return t;
-  return systemDark.matches ? "dark" : "light";
-};
+// With no stored choice the site is light, whatever the system setting.
+const resolved = (): "light" | "dark" => (root.getAttribute("data-theme") === "dark" ? "dark" : "light");
 const toggles = document.querySelectorAll<HTMLButtonElement>("[data-theme-toggle]");
 const syncToggle = () => {
   const next = resolved() === "dark" ? "light" : "dark";
@@ -25,7 +20,6 @@ toggles.forEach((b) =>
     syncToggle();
   }),
 );
-systemDark.addEventListener("change", syncToggle);
 syncToggle();
 
 // ---------- mobile menu ----------

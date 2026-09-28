@@ -1,5 +1,6 @@
 import { defineCollection, z } from "astro:content";
 import { glob } from "astro/loaders";
+import { categories } from "./config";
 
 // Drop a .md file in src/content/blog/ and the site picks it up: home LATEST card,
 // side list, archive, category chips and counts, /blog, search.json, RSS and sitemap.
@@ -9,8 +10,14 @@ const blog = defineCollection({
   schema: z.object({
     title: z.string(),
     description: z.string(),
-    // Chip + filter. Adding a category means adding it here and in `categories` in src/config.ts.
-    category: z.enum(["Interpretability", "LLMs", "ML", "Toki", "Building"]),
+    // Chip + filter. Any name works: a new one gets its own chip automatically.
+    // A case-insensitive match to a known category ("llms") is snapped to its spelling ("LLMs")
+    // so near-duplicates never split into two chips.
+    category: z
+      .string()
+      .trim()
+      .min(1)
+      .transform((c) => categories.find((k) => k.toLowerCase() === c.toLowerCase()) ?? c),
     topic: z.string().default(""),
     planted: z.coerce.date(),
     tended: z.coerce.date().optional(),
