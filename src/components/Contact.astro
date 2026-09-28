@@ -1,0 +1,17 @@
+---
+import { contact, site, socials } from "../config";
+---
+<section class="wrap section" id="contact" aria-labelledby="contact-h">
+  <div class="dialog">
+    <span class="dialog-speaker">{contact.speaker}</span>
+    <h2 id="contact-h" class="dialog-line">{contact.line}</h2>
+    <p class="dialog-sub">{contact.sub}</p>
+    <ul class="dialog-links">
+      <li><a href={`mailto:${site.email}`} data-copy-email={site.email}>▸ {site.email} (copy)</a></li>
+      {socials.map((s) => (
+        <li><a href={s.href} target="_blank" rel="noopener noreferrer">▸ {s.label}<span class="sr-only"> (opens in a new tab)</span></a></li>
+      ))}
+      <li><a href="/resume">▸ Résumé</a></li>
+    </ul>
+  </div>
+</section>

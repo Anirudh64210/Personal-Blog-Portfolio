@@ -1,0 +1,55 @@
+---
+// Work bento. `featured` takes the 2x2 tile, `wip` the dashed tile, the rest fill in order.
+// A tile links to its GitHub repo, or to the first post of its blog series when there is no
+// public repo. Post counts per project are computed from the posts (series name or backlink label).
+import { projects } from "../config";
+import { type Post, postUrl, postsForProject, seriesPosts } from "../lib/posts";
+
+interface Props { posts: Post[] }
+const { posts } = Astro.props;
+const wip = projects.filter((p) => p.wip).length;
+const done = projects.length - wip;
+
+const tiles = projects.map((p) => {
+  const n = postsForProject(p.title, posts);
+  const count = n ? ` · ${n} ${n === 1 ? "post" : "posts"}` : "";
+  if (p.repo) return { p, href: p.repo, external: true, foot: `Repo ↗${count}` };
+  const first = p.series ? seriesPosts(p.series, posts)[0] : undefined;
+  if (first) return { p, href: postUrl(first), external: false, foot: `Read the series${count} →` };
+  return { p, href: "", external: false, foot: "In progress" };
+});
+---
+<section class="wrap section" id="projects" aria-labelledby="projects-h">
+  <div class="section-head">
+    <div class="titles">
+      <span class="eyebrow">Most recent · {done} completed{wip > 0 && ` · ${wip} in progress`}</span>
+      <h2 id="projects-h" class="h2">Projects</h2>
+    </div>
+  </div>
+  <ul class="bento">
+    {tiles.map(({ p, href, external, foot }) =>
+      p.wip || !href ? (
+        <li class="tile tile--wip">
+          <span class="tile-code">{p.code}</span>
+          <h3>{p.title}</h3>
+          <p>{p.summary}</p>
+          <span class="tile-foot">In progress</span>
+        </li>
+      ) : (
+        <li class:list={["tile-li", { "tile-li--featured": p.featured }]}>
+          <a
+            class:list={["tile", { "tile--featured": p.featured }]}
+            href={href}
+            {...(external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
+          >
+            <span class="tile-code">{p.code}</span>
+            <h3>{p.title}</h3>
+            <p>{p.summary}</p>
+            {p.loot && <span class="loot"><b>LOOT</b>{p.loot}</span>}
+            <span class="tile-foot">{foot}{external && <span class="sr-only"> (opens GitHub in a new tab)</span>}</span>
+          </a>
+        </li>
+      ),
+    )}
+  </ul>
+</section>

@@ -1,0 +1,32 @@
+---
+import { site, socials, nav } from "../config";
+const year = new Date().getFullYear();
+---
+<footer class="site-foot">
+  <div class="wrap">
+    <div class="foot-grid">
+      <div class="foot-id">
+        <a class="brand" href="/">{site.name}</a>
+        <p>AI engineer and product dev in Las Vegas. Writing on LLMs, interpretability and shipping AI products.</p>
+        <a class="foot-top" href="#top">Back to top ↑</a>
+      </div>
+      <nav class="foot-col" aria-label="Site">
+        <span class="rail-label">SITE</span>
+        {nav.map((n) => <a href={n.href}>{n.label}</a>)}
+      </nav>
+      <nav class="foot-col" aria-label="Elsewhere">
+        <span class="rail-label">ELSEWHERE</span>
+        <a href={`mailto:${site.email}`}>Email</a>
+        {socials.map((s) => <a href={s.href} target="_blank" rel="noopener noreferrer">{s.label} ↗</a>)}
+      </nav>
+    </div>
+    <div class="foot-in">
+      <span>© {year} {site.name}. All rights reserved.</span>
+      <span class="foot-legal">
+        <a href="/privacy">Privacy</a>
+        <a href="/rss.xml">RSS</a>
+        <a href="/sitemap.xml">Sitemap</a>
+      </span>
+    </div>
+  </div>
+</footer>

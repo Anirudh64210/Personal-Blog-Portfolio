@@ -1,0 +1,54 @@
+---
+// The scrubber stage shared by the home XP box and /experience.
+// A native range input drives it (keyboard, touch, screen readers); the knob, fill and
+// pose are drawn around it. Positions are set from src/scripts/xp.ts in whole pixels.
+import { xp } from "../config";
+import { valueText } from "../lib/xp";
+
+interface Props { active: number; label?: string; scale?: number }
+const { active, label = "Scrub through experience and education", scale = 4 } = Astro.props;
+const cur = xp[active];
+const last = xp.length - 1;
+---
+<div class:list={["xp-stage", `xp-stage--s${scale}`]}>
+  <div class="xp-rail" data-xp-rail>
+    <div class="xp-pose" data-xp-pose inert aria-hidden="true">
+      <pixel-anirudh scale={String(scale)} state={cur.pose} data-xp-sprite data-scale={String(scale)}></pixel-anirudh>
+    </div>
+    <ol class="xp-cells" aria-hidden="true">
+      {xp.map((s, i) => (
+        <li
+          class:list={["xp-cell", { "is-done": i < active, "is-active": i === active }]}
+          data-pose={s.pose}
+          data-act={s.act}
+          data-label={s.label}
+          data-vt={valueText(s)}
+        ><span class="xp-tick"></span></li>
+      ))}
+    </ol>
+    <div class="xp-knob" data-xp-knob aria-hidden="true">
+      <span>◂</span><span class="xp-grip"><i></i><i></i><i></i></span><span>▸</span>
+    </div>
+    <input
+      class="xp-range"
+      type="range"
+      min="0"
+      max={last}
+      step="1"
+      value={active}
+      aria-label={label}
+      aria-valuetext={valueText(cur)}
+      data-xp-range
+    />
+  </div>
+  <div class="xp-labels">
+    {xp.map((s, i) => (
+      <button class="xp-label" type="button" data-go={i} aria-pressed={i === active ? "true" : "false"}>{s.label}</button>
+    ))}
+  </div>
+  <div class="xp-ends">
+    <button class="xp-label" type="button" data-go="0">◂ {xp[0].label}</button>
+    <span class="xp-now" data-xp-now aria-hidden="true">{cur.label}</span>
+    <button class="xp-label" type="button" data-go={last}>{xp[last].label} ▸</button>
+  </div>
+</div>

@@ -1,21 +1,100 @@
 ---
 import Base from "../../layouts/Base.astro";
-import PostList from "../../components/PostList.astro";
+import Crumbs from "../../components/Crumbs.astro";
 import { site } from "../../config";
-import { getCollection } from "astro:content";
+import { getPosts, postUrl, minutes, longDate, seriesChip, categoryCounts, byYear } from "../../lib/posts";
+import { graph, breadcrumbs, WEBSITE_ID } from "../../lib/schema";
 
-const posts = (await getCollection("blog", ({ data }) => !data.draft)).sort(
-  (a, b) => (b.data.tended ?? b.data.planted).valueOf() - (a.data.tended ?? a.data.planted).valueOf()
+const posts = await getPosts();
+const cats = categoryCounts(posts);
+const groups = byYear(posts);
+const description = "Notes on LLMs, interpretability and building AI products by Sai Anirudh Siddi.";
+const base = site.url.replace(/\/$/, "");
+
+const schema = graph(
+  {
+    "@type": "Blog",
+    "@id": `${base}/blog#blog`,
+    url: `${base}/blog`,
+    name: `Writing · ${site.name}`,
+    description,
+    isPartOf: { "@id": WEBSITE_ID },
+    blogPost: posts.map((p) => ({
+      "@type": "BlogPosting",
+      headline: p.data.title,
+      url: `${base}${postUrl(p)}`,
+      datePublished: p.data.planted.toISOString(),
+    })),
+  },
+  breadcrumbs([{ name: "Home", path: "/" }, { name: "Writing", path: "/blog" }]),
 );
 ---
-<Base title={`Writing · ${site.name}`} description={`Notes and essays by ${site.name} on ML systems, interpretability, and AI engineering.`}>
-  <main>
-    <section class="block blog-index"><div class="wrap u-narrow">
-      <span class="label" data-text="// transmissions"></span>
-      <h1 class="h2 reveal">From the notebook</h1>
-      <p class="lead reveal u-lead-gap">Everything I've written so far. Newest first.</p>
-      <PostList posts={posts} />
-      <a class="allback" href="/#blog">← back home</a>
-    </div></section>
-  </main>
+<Base title={`Writing · ${site.name}`} description={description} schema={schema} active="writing">
+  <div class="wrap">
+    <Crumbs items={[{ label: "Home", href: "/" }, { label: "Writing" }]} />
+    <div class="page-head">
+      <div class="titles">
+        <span class="eyebrow">Quest log · {posts.length} {posts.length === 1 ? "entry" : "entries"}</span>
+        <h1 class="page-title">Writing</h1>
+        <p class="lead">{description}</p>
+      </div>
+    </div>
+
+    <div class="blog-tools" data-blog-tools>
+      <form class="search" role="search" action="/blog" method="get" data-search>
+        <label class="sr-only" for="q">Search posts</label>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="M20 20l-3.5-3.5"></path></svg>
+        <input id="q" name="q" type="search" placeholder="Search titles, topics, categories" autocomplete="off" spellcheck="false" />
+      </form>
+      <div class="filter-chips" role="group" aria-label="Filter by category">
+        <button class="chip" type="button" data-cat="" aria-pressed="true">All <span class="n">{posts.length}</span></button>
+        {cats.map((c) => (
+          <button class="chip" type="button" data-cat={c.name} aria-pressed="false">{c.name} <span class="n">{c.n}</span></button>
+        ))}
+      </div>
+      <p class="blog-status" aria-live="polite" data-status></p>
+    </div>
+
+    <div class="blog-list" data-blog-list>
+      {groups.map((g) => (
+        <section class="blog-year" aria-labelledby={`y-${g.y}`} data-year>
+          <h2 id={`y-${g.y}`}>{g.y}</h2>
+          <ol>
+            {g.items.map((p) => {
+              const chip = seriesChip(p, posts);
+              const hay = [p.data.title, p.data.description, p.data.category, p.data.topic, p.data.series?.name ?? ""].join(" ").toLowerCase();
+              return (
+                <li class="blog-row" data-cat={p.data.category} data-hay={hay}>
+                  <a href={postUrl(p)}>
+                    <span class="post-meta">
+                      <span>{longDate(p.data.planted)} · {minutes(p)} min read</span>
+                      <span class="tag tag--cat">{p.data.category}</span>
+                      {chip && <span class="tag tag--line">{chip}</span>}
+                    </span>
+                    <h3>{p.data.title}</h3>
+                    <p>{p.data.description}</p>
+                  </a>
+                </li>
+              );
+            })}
+          </ol>
+        </section>
+      ))}
+      {posts.length === 0 && <p class="blog-empty">First post coming soon.</p>}
+      <p class="blog-empty is-filtered-out" data-empty>No posts match that yet. <a href="/blog">Show all posts</a>.</p>
+    </div>
+
+    <nav class="next-steps next-steps--3" aria-label="Keep exploring">
+      <span class="rail-label">KEEP EXPLORING</span>
+      <ul>
+        <li><a href="/"><b>Home</b><span>Who I am, what I build, how to reach me.</span></a></li>
+        <li><a href="/#projects"><b>Projects</b><span>The projects these posts come from.</span></a></li>
+        <li><a href="/experience"><b>Experience</b><span>Scrub through the run, stop by stop.</span></a></li>
+      </ul>
+    </nav>
+  </div>
 </Base>
+
+<script>
+  import "../../scripts/blog-filter";
+</script>

@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Pixel Anirudh demo</title>
+<style>
+  :root{ --bg:#F3F0EA; --ink:#1E1B2B; --muted:#6F6A73; }
+  @media (prefers-color-scheme: dark){ :root{ --bg:#15141B; --ink:#EEEAF2; --muted:#9892A0; } }
+  body{ margin:0; background:var(--bg); color:var(--ink); font:16px/1.55 system-ui, sans-serif; }
+  main{ max-width:960px; margin:0 auto; padding:64px 20px; display:flex; gap:32px; align-items:flex-end; justify-content:space-between; flex-wrap:wrap; }
+  h1{ font-size:44px; line-height:1; margin:0 0 12px; }
+  p{ color:var(--muted); max-width:46ch; margin:0; }
+  #log{ font:12px ui-monospace, monospace; color:var(--muted); padding:0 20px; max-width:960px; margin:0 auto; }
+</style>
+</head>
+<body>
+<main>
+  <div>
+    <h1>Hi, I’m Anirudh.</h1>
+    <p>Demo page for the &lt;pixel-anirudh&gt; element. Move the mouse, wait a minute, click him.</p>
+  </div>
+
+  <!-- The companion. Reach out links go in as slot="links" children. -->
+  <pixel-anirudh id="me" autoplay scale="4" bubble-position="left">
+    <a slot="links" href="mailto:hello@example.com">Email</a>
+    <a slot="links" href="https://www.linkedin.com/" target="_blank" rel="noopener">LinkedIn</a>
+    <a slot="links" href="https://github.com/" target="_blank" rel="noopener">GitHub</a>
+  </pixel-anirudh>
+</main>
+<div id="log" aria-live="polite"></div>
+
+<script src="../dist/pixel-anirudh.js"></script>
+<script>
+  const me = document.getElementById('me'), log = document.getElementById('log');
+  me.addEventListener('statechange', e => { log.textContent = 'state: ' + e.detail.state; });
+  me.addEventListener('ask', e => {
+    // Wire this to your inbox, a form endpoint, or an AI answer. The element already thanks the visitor.
+    console.log('question:', e.detail.question);
+  });
+</script>
+</body>
+</html>

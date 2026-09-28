@@ -1,35 +1,37 @@
-import type { APIContext } from "astro";
-import { getCollection } from "astro:content";
 import { site } from "../config";
+import { getPosts, postUrl } from "../lib/posts";
 
 const esc = (s: string) =>
   s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
 
-export async function GET(context: APIContext) {
-  const base = (context.site ?? new URL(site.url)).href.replace(/\/$/, "");
-  const posts = (await getCollection("blog", ({ data }) => !data.draft)).sort(
-    (a, b) => (b.data.tended ?? b.data.planted).valueOf() - (a.data.tended ?? a.data.planted).valueOf()
-  );
+export async function GET() {
+  const base = site.url.replace(/\/$/, "");
+  const posts = await getPosts();
   const items = posts
-    .map(
-      (p) => `    <item>
+    .map((p) => {
+      const url = `${base}${postUrl(p)}`;
+      return `    <item>
       <title>${esc(p.data.title)}</title>
-      <link>${esc(`${base}/blog/${p.id}`)}</link>
-      <guid>${esc(`${base}/blog/${p.id}`)}</guid>
+      <link>${esc(url)}</link>
+      <guid isPermaLink="true">${esc(url)}</guid>
       <description>${esc(p.data.description)}</description>
-      <pubDate>${(p.data.tended ?? p.data.planted).toUTCString()}</pubDate>
-    </item>`
-    )
+      <category>${esc(p.data.category)}</category>
+      <pubDate>${p.data.planted.toUTCString()}</pubDate>
+    </item>`;
+    })
     .join("\n");
   const xml = `<?xml version="1.0" encoding="UTF-8"?>
-<rss version="2.0">
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>${esc(site.name)} · Writing</title>
     <link>${esc(`${base}/blog`)}</link>
-    <description>${esc(site.description)}</description>
+    <atom:link href="${esc(`${base}/rss.xml`)}" rel="self" type="application/rss+xml" />
+    <description>Notes on LLMs, interpretability and building AI products by ${esc(site.name)}.</description>
     <language>en-us</language>
-${items}
+    <managingEditor>${esc(site.email)} (${esc(site.name)})</managingEditor>
+${posts[0] ? `    <lastBuildDate>${posts[0].data.planted.toUTCString()}</lastBuildDate>\n` : ""}${items}
   </channel>
-</rss>`;
-  return new Response(xml, { headers: { "Content-Type": "application/xml" } });
+</rss>
+`;
+  return new Response(xml, { headers: { "Content-Type": "application/rss+xml; charset=utf-8" } });
 }

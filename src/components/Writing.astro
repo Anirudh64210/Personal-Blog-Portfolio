@@ -1,0 +1,85 @@
+---
+// Home "Writing" section. Grows by itself: post 1 is the LATEST card, posts 2 to 5 the
+// side list, 6 and later the archive grouped by year. Chips and counts come from the posts.
+import { type Post, postUrl, minutes, longDate, shortDate, seriesChip, categoryCounts, byYear } from "../lib/posts";
+
+interface Props { posts: Post[] }
+const { posts } = Astro.props;
+const [latest, ...rest] = posts;
+const side = rest.slice(0, 4);
+const archive = byYear(rest.slice(4));
+const cats = categoryCounts(posts);
+const count = posts.length;
+---
+<section class="wrap section" id="writing" aria-labelledby="writing-h">
+  <div class="section-head">
+    <div class="titles">
+      <span class="eyebrow">Quest log · {count} {count === 1 ? "entry" : "entries"}</span>
+      <h2 id="writing-h" class="h2">Writing</h2>
+    </div>
+    {count > 0 && (
+      <nav class="chips" aria-label="Browse writing by category">
+        <a class="chip is-active" href="/blog">All <span class="n">{count}</span></a>
+        {cats.map((c) => (
+          <a class="chip" href={`/blog?cat=${encodeURIComponent(c.name)}`}>{c.name} <span class="n">{c.n}</span></a>
+        ))}
+      </nav>
+    )}
+  </div>
+
+  {latest ? (
+    <div class="writing-grid">
+      <a class="latest" href={postUrl(latest)}>
+        <span class="latest-meta">
+          <span class="tag tag--amber">Latest</span>
+          <span>{longDate(latest.data.planted)} · {latest.data.category} · {minutes(latest)} min read</span>
+        </span>
+        <h3>{latest.data.title}</h3>
+        <p>{latest.data.description}</p>
+        <span class="latest-go" aria-hidden="true">Read post →</span>
+      </a>
+      {side.length > 0 && (
+        <ol class="side-list">
+          {side.map((p) => {
+            const chip = seriesChip(p, posts);
+            return (
+              <li>
+                <a href={postUrl(p)}>
+                  <span class="post-meta">
+                    <span>{longDate(p.data.planted)} · {minutes(p)} min</span>
+                    {chip && <span class="tag tag--line">{chip}</span>}
+                  </span>
+                  <h3>{p.data.title}</h3>
+                </a>
+              </li>
+            );
+          })}
+        </ol>
+      )}
+    </div>
+  ) : (
+    <p class="blog-empty">First post coming soon.</p>
+  )}
+
+  {archive.length > 0 && (
+    <div class="archive">
+      <div class="archive-head">
+        <span class="label">Older entries</span>
+        <a class="section-link" href="/blog">See all {count} posts →</a>
+      </div>
+      {archive.map((g) => (
+        <div class="year-group">
+          <h3>{g.y}</h3>
+          <div class="year-items">
+            {g.items.map((p) => (
+              <a href={postUrl(p)}>
+                <span class="t">{p.data.title}</span>
+                <span class="m">{shortDate(p.data.planted)} · {minutes(p)}m</span>
+              </a>
+            ))}
+          </div>
+        </div>
+      ))}
+    </div>
+  )}
+</section>

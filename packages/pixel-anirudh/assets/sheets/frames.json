@@ -1,0 +1,93 @@
+{
+ "idle": {
+  "frames": 48,
+  "frameWidth": 50,
+  "frameHeight": 64,
+  "msPerFrame": 125,
+  "loops": true
+ },
+ "sleep": {
+  "frames": 48,
+  "frameWidth": 50,
+  "frameHeight": 64,
+  "msPerFrame": 125,
+  "loops": true
+ },
+ "awake": {
+  "frames": 12,
+  "frameWidth": 50,
+  "frameHeight": 64,
+  "msPerFrame": 125,
+  "loops": false
+ },
+ "hello": {
+  "frames": 48,
+  "frameWidth": 50,
+  "frameHeight": 64,
+  "msPerFrame": 125,
+  "loops": true
+ },
+ "work": {
+  "frames": 96,
+  "frameWidth": 50,
+  "frameHeight": 64,
+  "msPerFrame": 125,
+  "loops": true
+ },
+ "eat": {
+  "frames": 72,
+  "frameWidth": 50,
+  "frameHeight": 64,
+  "msPerFrame": 125,
+  "loops": true
+ },
+ "ask": {
+  "frames": 48,
+  "frameWidth": 50,
+  "frameHeight": 64,
+  "msPerFrame": 125,
+  "loops": true
+ },
+ "reach": {
+  "frames": 48,
+  "frameWidth": 50,
+  "frameHeight": 64,
+  "msPerFrame": 125,
+  "loops": true
+ },
+ "plant": {
+  "frames": 48,
+  "frameWidth": 50,
+  "frameHeight": 64,
+  "msPerFrame": 125,
+  "loops": true
+ },
+ "lift": {
+  "frames": 48,
+  "frameWidth": 50,
+  "frameHeight": 64,
+  "msPerFrame": 125,
+  "loops": true
+ },
+ "lab": {
+  "frames": 48,
+  "frameWidth": 50,
+  "frameHeight": 64,
+  "msPerFrame": 125,
+  "loops": true
+ },
+ "celebrate": {
+  "frames": 48,
+  "frameWidth": 50,
+  "frameHeight": 64,
+  "msPerFrame": 125,
+  "loops": true
+ },
+ "read": {
+  "frames": 48,
+  "frameWidth": 50,
+  "frameHeight": 64,
+  "msPerFrame": 125,
+  "loops": true
+ }
+}

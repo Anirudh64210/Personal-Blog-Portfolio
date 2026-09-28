@@ -1,0 +1,27 @@
+---
+// Home "Experience and education" box: the scrubber on top, then the active stop's details
+// beside a one-line list of every stop. Nothing expands or pushes the page around.
+import XpStage from "./XpStage.astro";
+import XpPanel from "./XpPanel.astro";
+import { defaultStop } from "../lib/xp";
+
+const active = defaultStop();
+---
+<section class="wrap section" id="experience" aria-labelledby="xp-h">
+  <div class="section-head">
+    <div class="titles">
+      <span class="eyebrow">XP log · drag to scrub through the run</span>
+      <h2 id="xp-h" class="h2">Experience and education</h2>
+    </div>
+    <a class="section-link" href="/experience">Full page →</a>
+  </div>
+  <div class="xp-card" data-xp>
+    <XpStage active={active} scale={3} />
+    <XpPanel active={active} />
+  </div>
+</section>
+
+<script>
+  import { initXp } from "../scripts/xp";
+  document.querySelectorAll<HTMLElement>("[data-xp]").forEach((el) => initXp(el));
+</script>

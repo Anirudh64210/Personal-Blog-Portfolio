@@ -1,142 +1,195 @@
-// ───────────────────────────────────────────────────────────
-//  EDIT SITE HERE. Everything below feeds the homepage.
-//  (Blog posts live in src/content/blog/*.md, see README.)
-// ───────────────────────────────────────────────────────────
+// Draft replacement for src/config.ts. All site copy lives here; blog posts stay in src/content/blog/.
+// Copy is Anirudh's own voice (lowercase intro is intentional). No em or en dashes anywhere.
 
 export const site = {
   name: "Sai Anirudh Siddi",
-  role: "AI & Data Engineer",
+  shortName: "ani",
+  role: "AI Engineer",
   url: "https://www.saianirudh.blog/",
+  title: "Sai Anirudh Siddi · AI Engineer in Las Vegas",
   description:
-    "Sai Anirudh Siddi - AI Engineer working on ML systems, LLMs, model evaluation and SaaS. Projects, writing, and experience.",
-  email: "siddish@mail.uc.edu",
-  location: "Las Vegas, Nevada",
-  coords: "36.17°N 115.14°W",
-  fileNo: "AS-001",
+    "Sai Anirudh Siddi (ani) is an AI engineer and product dev in Las Vegas. AI Fellow at Handshake AI, building Toki. Writing on LLMs, interpretability and shipping AI products.",
+  email: "saianirudhsiddi4@gmail.com",
+  location: { city: "Las Vegas", region: "NV", country: "US" },
+  portrait: "/portrait-hero.jpg",
+  portraitAlt: "Sai Anirudh Siddi, AI engineer, smiling in a brown sherpa jacket",
+  resumePdf: "/resume/Sai_Anirudh_Siddi_Resume.pdf",
 };
 
 export const hero = {
-  eyebrow: "// engineer · ai · ml · data · saas",
-  tagline: "I build on ideas I find cool - and try out new things.",
+  eyebrow: "PLAYER 1 · AI ENGINEER · LAS VEGAS",
+  intro: [
+    "hi, i'm ani. i work with ai for a living. after hours i build hobby projects for fun and solve problems with technology.",
+    "master of engineering in cs from the university of cincinnati. now in las vegas, fuelled by a desire to do something different. something great.",
+  ],
+  photoCaption: "PLAYER 1 · IRL LARPING",
 };
 
-// About terminal. [type, text]; type is "cmd" (prompt line) or "out" (output line)
-export const terminal: [("cmd" | "out"), string][] = [
-  ["cmd", "whoami"],
-  ["out", "sai anirudh siddi · ai & data engineer"],
-  ["cmd", "cat focus.txt"],
-  ["out", "ml systems, llms, models, eval and saas."],
-  ["cmd", "cat now.txt"],
-  ["out", "ai fellow @ handshake ai · llm evaluation. m.eng cs @ university of cincinnati · gpa 3.95. building glassbox: seeing inside medical llms."],
-  ["cmd", 'echo "$MANTRA"'],
-  ["out", "solve real-world problems using technology."],
-];
-
-export const facts: [string, string, boolean?][] = [
-  ["Based", "Las Vegas, NV"],
-  ["Focus", "AI · ML · Data"],
-  ["Stack", "Python · LLMs · React.js"],
-  ["Status", "Open to AI · Data roles", true],
-];
+// Rendered as a terminal ("ani --about", "ani --abilities"). Real HTML text, not typed in by JS.
+export const about = {
+  handle: "ani@saianirudh.blog",
+  fields: [
+    ["class", ["ai engineer, product dev"]],
+    ["base", ["las vegas, nv"]],
+    ["status", ["ai fellow at handshake ai", "volunteer engineer at an ngo", "building toki (in progress)"]],
+  ] as [string, string[]][],
+  abilities: [
+    ["ai engineering", "llm apps and agents, prototype to production"],
+    ["product dev", "idea to shipped product, end to end"],
+    ["data + ml pipelines", "pipelines that stay up at 3am"],
+    ["iot + ml", "sensors in, decisions out"],
+    ["interpretability", "opening models up to see what they compute"],
+  ] as [string, string][],
+};
 
 export const socials = [
-  { label: "GitHub", href: "https://github.com/Anirudh64210" },
   { label: "LinkedIn", href: "https://www.linkedin.com/in/sai-anirudh-siddi/" },
-  { label: "Email", href: "mailto:siddish@mail.uc.edu" },
+  { label: "GitHub", href: "https://github.com/Anirudh64210" },
 ];
 
-export const press = [
-  {
-    date: "2025.11",
-    src: "uc.edu",
-    title: "Cincinnati teams blast off to the global stage in NASA hackathon",
-    href: "https://www.uc.edu/news/articles/2025/11/cincinnati-teams-blast-off-to-global-stage-in-nasa-hackathon.html",
-  },
-  {
-    date: "2025.10",
-    src: "linkedin",
-    title: "1819 Innovation Hub: Hub Happenings",
-    href: "https://www.linkedin.com/pulse/hub-happenings-1819-innovation-hub-zo2jc/",
-  },
+// Wins and press. Only real links; an item without href renders as plain text (no arrow).
+export const wins = [
+  { tag: "WIN", date: "2025", title: "Best Use of NASA Data, NASA Space Apps Challenge", source: "ExoSeeker · 2,000+ participants",
+    href: "https://www.uc.edu/news/articles/2025/11/cincinnati-teams-blast-off-to-global-stage-in-nasa-hackathon.html" },
+  { tag: "WIN", date: "2025", title: "1st Place, Best Project Overall, Ohio's largest hackathon", source: "NeedleHelp · 140+ teams · via 1819 Innovation Hub",
+    href: "https://www.linkedin.com/pulse/hub-happenings-1819-innovation-hub-zo2jc/" },
+  { tag: "PRESS", date: "Nov 2025", title: "Cincinnati teams blast off to the global stage in NASA hackathon", source: "uc.edu",
+    href: "https://www.uc.edu/news/articles/2025/11/cincinnati-teams-blast-off-to-global-stage-in-nasa-hackathon.html" },
 ];
 
-// Card order here is the order on the page, and the morse numeral follows that
-// position, so reordering is just moving an entry. Each card links straight to
-// its GitHub repo; set `upcoming: true` and leave `repo` off for something not
-// shipped yet, which renders as an unclickable tile marked "Upcoming".
+// Work bento. `featured` takes the 2x2 tile, `wip` gets the dashed tile, everything else fills in order.
+// `repo` links the tile to GitHub. A tile with `series` and no public repo links to the first
+// post of that blog series instead (GlassBox's repo is not public, github.com/Anirudh64210/glassbox 404s).
 export const projects = [
-  {
-    code: "ON-DEVICE · LLM",
-    title: "Toki",
-    summary:
-      "Fully local AI meeting notetaker on Qwen 3.5. Spots your meetings, transcribes them, and writes structured notes into a searchable Library. Nothing leaves the laptop.",
-    tags: ["Qwen 3.5", "Local LLM", "Transcription"],
-    // No repo yet: a card without one renders as an "upcoming" tile instead of a link.
-    upcoming: true,
-  },
-  {
-    code: "MECH-INTERP",
-    title: "GlassBox",
-    summary:
-      "Mechanistic interpretability for medical LLMs (Gemma 3), surfacing 15+ SAE feature activations with live uncertainty & harmfulness tracking during inference.",
-    tags: ["PyTorch", "LLMs", "FastAPI"],
-    repo: "https://github.com/Anirudh64210/glassbox",
-  },
-  {
-    code: "NASA · AI",
-    title: "ExoSeeker",
-    summary:
-      "AI exoplanet detection on NASA Kepler data, >90% accuracy. Won Best Use of NASA Data and advanced to the global NASA stage.",
-    tags: ["PyTorch", "scikit-learn"],
-    repo: "https://github.com/Anirudh64210/mlp_model",
-  },
-  {
-    code: "MEDTECH · IOT",
-    title: "NeedleHelp",
-    summary:
-      "End-to-end IoT + ML robotics with real-time control, >90% accuracy. 1st place overall at Ohio's largest hackathon (800+ participants).",
-    tags: ["Python", "C++", "IoT/ML"],
-    repo: "https://github.com/needlehelp",
-  },
-  {
-    code: "IOT · ML",
-    title: "Automating Aquaponics",
-    summary:
-      "IoT monitoring at 1,000+ daily data points with ML yield forecasting: 20% crop-yield gain, Tableau dashboards, peer-reviewed findings.",
-    tags: ["IoT", "Forecasting", "Tableau"],
-    repo: "https://github.com/Anirudh64210",
-  },
+  { code: "MECH INTERP · FEATURED", title: "GlassBox", featured: true, series: "GlassBox",
+    summary: "x-ray for medical llms. 15+ sae features live during inference, flags when the model is unsure of itself." },
+  { code: "IN PROGRESS", title: "Toki", wip: true,
+    summary: "fully offline meeting intelligence: asr, diarization and a 4-bit qwen3-4b on a 4gb gpu. live transcription from 21s to ~1s, 9.2% wer. nothing leaves the laptop." },
+  { code: "NASA · AI", title: "ExoSeeker", repo: "https://github.com/Anirudh64210/mlp_model",
+    summary: "exoplanets in kepler data, >90% accuracy.", loot: "best use of nasa data, space apps" },
+  { code: "MEDTECH · IOT", title: "NeedleHelp", repo: "https://github.com/needlehelp",
+    summary: "iot + ml for real-time robotic control.", loot: "1st of 140 teams, ohio's largest hackathon" },
+  { code: "IOT · ML", title: "Aquaponics", repo: "https://github.com/Anirudh64210",
+    summary: "taught a working fish farm to run itself. 1,000 readings a day, 40% less babysitting, 20% more yield." },
 ];
 
-// Experience & education rows each carry a logo tile.
-//   logo  - path to the logo in public/logos/orgs/. See the README there for
-//           how to add a new one.
-//   plate - "light" sets the logo on a white chip; use it for marks with dark
-//           ink or a white background. "full" lets the image fill the tile
-//           edge to edge; use it when the logo already carries its own
-//           brand-colour background (UC's red, Handshake's lime).
-//   mark  - 1-3 letter monogram, the fallback when there is no `logo` yet.
-//   slug  - picks the row's accent colour from the `.rec .lg-<slug>` rules in
-//           gotham.css. The colour lives in CSS so no row needs an inline
-//           style attribute, which would be blocked by the site's CSP.
-
-export const experience = [
-  { yr: "AUG 2026 - NOW", role: "AI Fellow", org: "Handshake AI -- LLM Evaluation · Adversarial benchmarks & data pipelines", loc: "Remote", mark: "HS", slug: "handshake", logo: "/logos/orgs/handshake.png", plate: "full" },
-  { yr: "MAY - DEC 2025", role: "Data Engineer", org: "Great American Insurance -- Predictive Analytics · 1M+ records, AI-assisted analytics", loc: "Ohio, USA", mark: "GA", slug: "gaig", logo: "/logos/orgs/gaig.png", plate: "light" },
-  { yr: "AUG - NOV 2023", role: "Software Engineer", org: "DRDO -- Digital Forensics · Ingestion & validation pipelines", loc: "Hyderabad, IN", mark: "DR", slug: "drdo", logo: "/logos/orgs/drdo.png", plate: "light" },
-  { yr: "MAY - SEP 2022", role: "Data Engineer", org: "Dsign Code LLC -- IT · SQL/PL-SQL reporting across 20+ modules", loc: "Michigan, USA", mark: "DC", slug: "dsign", logo: "/logos/orgs/dsign-code.png", plate: "light" },
+// XP log. Chronological. `pose` is the pixel-anirudh state shown on the scrubber thumb.
+// `logo` (128px PNG in public/logos/orgs/) shows beside the stop; `plate` is "light" (white chip,
+// for dark or white-background marks) or "full" (the logo already has its own brand background).
+// Stops without a logo get a two-letter pixel monogram (`mono`, or initials of `short`).
+// New states (plant, lift, lab, celebrate, read) must be added to the companion engine; see HANDOFF.md.
+export const xp = [
+  { label: "JNTU '20", logo: "/logos/orgs/jntu.png", plate: "light", short: "JNTU Hyderabad", years: "2020 to 2024", kind: "EDUCATION", period: "Jul 2020 to May 2024", place: "Hyderabad, India",
+    role: "B.Tech, Computer Science", org: "Jawaharlal Nehru Technological University, Hyderabad", pose: "hello", act: "saying hi",
+    points: ["computer science undergrad in hyderabad.", "the aquaponics project ran alongside it from 2022 to 2024."] },
+  { label: "AQUAPONICS '22", mono: "AQ", short: "Automating Aquaponics", years: "2022 to 2024", kind: "PROJECT", period: "2022 to 2024", place: "alongside undergrad",
+    role: "Automating Aquaponics", org: "Startup incubator project, with professors and a local business", pose: "plant", act: "growing things",
+    points: ["taught a working fish farm to run itself: iot monitoring across water, ph and environment sensors, 1,000+ readings a day, 40% less manual babysitting.",
+      "ml yield forecasting that contributed to a 20% improvement in crop yield.",
+      "tableau dashboards that drove a 10% profit increase for the business; research paper under peer review."] },
+  { label: "DSIGN '22", logo: "/logos/orgs/dsign-code.png", plate: "light", short: "Dsign Code LLC", years: "2022", kind: "EXPERIENCE", period: "May to Sep 2022", place: "Michigan, USA (remote)",
+    role: "Data Engineer", org: "Dsign Code LLC", pose: "lift", act: "lifting",
+    points: ["sql and pl/sql reporting workflows across 20+ enterprise modules.", "analyzed 50k+ monthly transactional records; improved system performance by 15%."] },
+  { label: "DRDO '23", logo: "/logos/orgs/drdo.png", plate: "light", short: "DRDO", years: "2023", kind: "EXPERIENCE", period: "Aug to Nov 2023", place: "Hyderabad, India",
+    role: "Software Engineer, Digital Forensics", org: "DRDO, Defense Research and Development of India", pose: "lab", act: "in the lab",
+    points: ["processed 700+ structured and unstructured forensic artifacts per run.", "built data ingestion, management and validation pipelines for downstream investigative analysis.", "improved system reliability and investigative efficiency by 30%."] },
+  { label: "UC '24", logo: "/logos/orgs/uc.png", plate: "full", short: "University of Cincinnati", years: "2024 to 2025", kind: "EDUCATION", period: "Aug 2024 to Dec 2025", place: "Cincinnati, Ohio",
+    role: "Master of Engineering, Computer Science", org: "University of Cincinnati", pose: "celebrate", act: "celebrating",
+    points: ["grad school in ohio.", "best use of nasa data at nasa space apps (exoseeker), 1st of 140+ teams at ohio's largest hackathon (needlehelp)."] },
+  { label: "GAIG '25", logo: "/logos/orgs/gaig.png", plate: "light", short: "Great American", years: "2025 to 2026", kind: "EXPERIENCE", period: "May 2025 to Jan 2026", place: "Cincinnati, Ohio",
+    role: "Data Engineer, Predictive Analytics", org: "Great American Insurance Group", pose: "eat", act: "pizza break",
+    points: ["analyzed 1m+ underwriting and litigation records; 10% improvement in decision accuracy.", "built optimized data management pipelines and reporting across multiple systems.", "validated an ai-assisted analytics tool with stakeholders; 60% better processing efficiency."] },
+  { label: "HANDSHAKE '26", logo: "/logos/orgs/handshake.png", plate: "full", short: "Handshake AI", years: "2026 to now", kind: "NOW", period: "Aug 2026 to now", place: "Remote",
+    role: "AI Fellow", org: "Handshake AI", pose: "read", act: "reading up",
+    points: ["author adversarial evaluation sets and rl environments for frontier llms, with rubric-based reward functions; over 50% stumping rate on multi-step quantitative reasoning.",
+      "build and curate labeled evaluation datasets, refining prompts against model reasoning traces.", "score outputs against calibrated rubrics that serve as rl reward signals."] },
+  { label: "EXPANDRANGE", mono: "ER", short: "ExpandRange", years: "soon", kind: "UPCOMING", period: "soon", place: "Las Vegas, NV",
+    role: "ExpandRange", org: "in the works", highlight: true, pose: "work", act: "building",
+    points: ["building our own ai products and services."] },
 ];
 
-export const education = [
-  { yr: "2024 - 2025", role: "University of Cincinnati", org: "M.Eng. Computer Science · GPA 3.95 / 4.0", loc: "Ohio, USA", mark: "UC", slug: "uc", logo: "/logos/orgs/uc.png", plate: "full" },
-  { yr: "2020 - 2024", role: "JNT University Hyderabad", org: "B.Tech. Computer Science · GPA 3.9 / 4.0", loc: "India", mark: "JN", slug: "jntu", logo: "/logos/orgs/jntu.png", plate: "light" },
+export const contact = {
+  speaker: "ANIRUDH",
+  line: "want to chat? reach out to me here.",
+  sub: "i'm always looking to connect and meet new people. hmu.",
+};
+
+// Header navigation. `key` marks the active pill (pages pass `active="writing"` and so on).
+export const nav = [
+  { key: "home", label: "Home", href: "/" },
+  { key: "writing", label: "Writing", href: "/blog" },
+  { key: "projects", label: "Projects", href: "/#projects" },
+  { key: "experience", label: "Experience", href: "/experience" },
+  { key: "resume", label: "Résumé", href: "/resume" },
+  { key: "contact", label: "Contact", href: "/#contact" },
 ];
 
-export const skills: [string, string[]][] = [
-  ["languages", ["Python", "C++", "JS / TS", "SQL", "Java", "C"]],
-  ["ai · ml", ["PyTorch", "Transformers", "LLMs", "LangChain", "FAISS", "scikit-learn", "TensorFlow", "Mech. Interp", "RAG", "Agentic AI"]],
-  ["backend", ["FastAPI", "Node.js", "React", "REST APIs", "Microservices", "GPU Inference", "RunPod", "Docker", "Streamlit"]],
-  ["data eng", ["Spark", "Hadoop", "ETL", "Data Validation", "Feature Eng", "Pandas", "NumPy"]],
-  ["cloud", ["AWS", "GCP", "Azure", "Snowflake", "Git", "Linux", "MongoDB", "MySQL"]],
-  ["observability", ["Arize Phoenix", "Sentry", "Experiment Tracking", "Model Eval", "Dashboards"]],
-];
+// Preferred chip order for blog categories. Not a whitelist: a post may use any category,
+// and ones not listed here are added after these, most posts first.
+export const categories: readonly string[] = ["Interpretability", "LLMs", "ML", "Toki", "Building"];
+
+// Web résumé (/resume). Keep in sync with public/resume/Sai_Anirudh_Siddi_Resume.pdf.
+// No phone number and no GPA on the web version (the PDF keeps both).
+export const resume = {
+  contact: [
+    { text: "Las Vegas, NV" },
+    { text: "saianirudhsiddi4@gmail.com", href: "mailto:saianirudhsiddi4@gmail.com" },
+    { text: "LinkedIn", href: "https://www.linkedin.com/in/sai-anirudh-siddi/" },
+    { text: "github.com/Anirudh64210", href: "https://github.com/Anirudh64210" },
+    { text: "saianirudh.blog", href: "https://www.saianirudh.blog/" },
+  ] as { text: string; href?: string }[],
+  education: [
+    { degree: "Master of Engineering, Computer Science", school: "University of Cincinnati", period: "Aug 2024 to Dec 2025" },
+    { degree: "Bachelor of Technology, Computer Science", school: "Jawaharlal Nehru Technological University, Hyderabad", period: "Jul 2020 to May 2024" },
+  ],
+  skills: [
+    ["Languages", "Python, SQL, Java, C, C#, Go, Rust, Scala, R, CSS"],
+    ["Frameworks", "PyTorch, Transformers, LangChain, scikit-learn, TensorFlow, FastAPI, Node.js, Streamlit"],
+    ["AI/ML systems", "LLMs, RL (RLHF, RLVR), reward modeling, LLM evaluation, red-teaming, adversarial prompting, rubric design, mechanistic interpretability, RAG, agentic AI, FAISS, MLOps"],
+    ["Backend and infra", "Kubernetes, REST APIs, microservices, GPU inference pipelines, RunPod, Docker, CI/CD"],
+    ["Data engineering", "Spark, Hadoop, ETL, pipelines, validation, feature engineering, Pandas, NumPy"],
+    ["Cloud and platforms", "AWS, GCP, Azure, Snowflake, Git, Linux, MongoDB, MySQL"],
+    ["Observability", "Arize Phoenix, Sentry, experiment tracking, model evaluation, Tableau, Power BI, Looker"],
+  ] as [string, string][],
+  experience: [
+    { role: "AI Fellow", org: "Handshake AI", period: "Aug 2026 to present", points: [
+      "Author adversarial evaluation sets and reinforcement learning environments for frontier LLMs, writing domain-specific scenarios, questions and rubric-based reward functions; over 50% stumping rate on multi-step quantitative reasoning tasks.",
+      "Build and curate labeled evaluation datasets, refining prompts against model responses and reasoning traces to separate genuine reasoning gaps from prompt ambiguity.",
+      "Score and analyze outputs against calibrated rubrics that serve as RL reward signals, surfacing systematic weakness patterns for the next round of environment design.",
+    ] },
+    { role: "Data Engineer", org: "Great American Insurance Group, Predictive Analytics", period: "May 2025 to Jan 2026", points: [
+      "Analyzed 1M+ underwriting and litigation records using SQL and Python to surface data inconsistencies and workflow bottlenecks, improving decision accuracy by 10%.",
+      "Built optimized data management pipelines and reporting across multiple systems, improving data accessibility and operational efficiency.",
+      "Validated an AI-assisted analytics tool with business stakeholders, improving processing efficiency by 60%.",
+    ] },
+    { role: "Software Engineer", org: "DRDO, Defense Research and Development of India, Digital Forensics", period: "Aug 2023 to Nov 2023", points: [
+      "Processed and analyzed 700+ structured and unstructured forensic artifacts per run.",
+      "Designed data ingestion, management and validation pipelines for downstream analysis.",
+      "Documented schemas and processing logic while testing outputs, improving reliability and investigative efficiency by 30%.",
+    ] },
+    { role: "Data Engineer", org: "Dsign Code LLC, IT", period: "May 2022 to Sep 2022", points: [
+      "Developed SQL and PL/SQL reporting workflows across 20+ enterprise modules.",
+      "Analyzed 50K+ monthly transactional records, improving system performance by 15%.",
+      "Partnered with cross-functional teams to gather requirements and validate reporting outputs.",
+    ] },
+  ],
+  projects: [
+    { name: "Toki", kind: "On-device AI meeting assistant", points: [
+      "Fully offline meeting intelligence chaining ASR, speaker diarization and a 4-bit quantized Qwen3-4B for note generation; zero cloud inference cost, no data egress.",
+      "GPU inference pipeline for a 0.6B ONNX ASR model and 4B LLM on a 4GB-VRAM consumer GPU; live transcription latency from 21s to ~1s, diarization at 0.014 RTF.",
+      "Sole engineer from model selection to a packaged Windows release; 9.2% WER, retrieval precision@1 from 82.9% to 87.5%.",
+    ] },
+    { name: "GlassBox", kind: "Mechanistic interpretability", points: [
+      "Mech-interp system for medical LLMs on Gemma 3 4B/2B, surfacing 15+ SAE feature activations with real-time uncertainty and harmfulness tracking.",
+      "FastAPI and RunPod GPU microservices with Claude agents, Arize Phoenix and Sentry for live interpretability monitoring.",
+    ] },
+    { name: "ExoSeeker", kind: "AI prediction platform", points: [
+      "Exoplanet detection on Kepler data, over 90% accuracy, with PyTorch and scikit-learn pipelines.",
+      "Best Use of NASA Data, NASA Space Apps Challenge (2,000+ participants); represented Cincinnati at the Global Challenge.",
+    ] },
+    { name: "NeedleHelp", kind: "MedTech", points: [
+      "End-to-end IoT + ML system for real-time robotic control, over 90% system accuracy.",
+      "1st Place, Best Project Overall, Ohio's largest hackathon (140+ teams, 800+ participants).",
+    ] },
+  ],
+};

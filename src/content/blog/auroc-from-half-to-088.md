@@ -1,15 +1,27 @@
 ---
 title: "From 0.50 to 0.88 AUROC with activation normalization"
 description: "Why normalizing residual-stream activations before a linear probe is the highest-leverage change for behavioral detection in LLMs."
+category: "Interpretability"
+tldr: "One residual dimension on Gemma 3 4B was 1,300x louder than the median, so the probe measured loudness, not harm. Per-dimension normalization took the same probe from 0.55 to 0.88 AUROC."
+series:
+  name: "GlassBox"
+  part: 2
 topic: "interpretability · calibration"
 planted: 2026-06-21
-backlinkLabel: "GlassBox"
-backlinkHref: "https://github.com/Anirudh64210/glassbox"
 ---
+
+## The coin-flip probe
 
 Our first harmful-content probes scored no better than a coin flip. AUROC sat at 0.55, pure chance, even though the signal we wanted was clearly in the model somewhere. Logistic regression on the same activations was getting 0.89, so the signal was there. Raw diff-of-means just could not see it.
 
-The cause turned out to be a single oversized dimension in the residual stream. On Gemma 3 4B at layer 12, one feature had a standard deviation of 6,686 against a median of 4.9, a ratio of over 1,300 to 1. In a raw dot product that one dimension drowned out everything else. The probe was not measuring harm. It was measuring the loudest number in the vector.
+## One loud dimension
+
+The cause turned out to be a single oversized dimension in the residual stream. On Gemma 3 4B at layer 12, one feature had a standard deviation of 6,686 against a median of 4.9, a ratio of over 1,300 to 1. In a raw dot product that one dimension drowned out everything else.
+
+> [!POINT]
+> The probe was not measuring harm. It was measuring the loudest number in the vector.
+
+## The fix, in 6 lines
 
 Most of our probe gains did not come from a fancier classifier. They came from normalization.
 
@@ -28,5 +40,7 @@ score = Xn @ direction   # project each activation onto the harmful direction
 ```
 
 That correction took the same probe, on the same activations, from 0.55 to 0.88 AUROC. Nothing else changed. Same contrastive pairs, same layer, same model.
+
+## Ship the transform
 
 The lesson stuck: before you reach for a bigger model, make sure your features are pointing the way you think they are. And whatever normalization you train with has to ship with the probe. We save the mean and std alongside the direction, because the exact same transform has to run at inference or the gains vanish.

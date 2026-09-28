@@ -1,0 +1,15 @@
+---
+// Organisation logo tile for an XP stop. With a logo: "light" sets it on a white chip,
+// "full" lets it fill the tile (it carries its own brand background). Without one: a
+// two-letter pixel monogram, so every row lines up.
+interface Props { stop: { short: string; logo?: string; plate?: string; mono?: string }; size?: "sm" | "lg"; decorative?: boolean }
+const { stop, size = "lg", decorative = false } = Astro.props;
+const words = stop.short.split(/\s+/);
+const mono = stop.mono ?? (words.length > 1 ? words[0][0] + words[1][0] : stop.short.slice(0, 2)).toUpperCase();
+const px = size === "lg" ? 64 : 28;
+---
+<span class:list={["org", `org--${size}`, stop.logo ? `org--${stop.plate ?? "light"}` : "org--mono"]} aria-hidden={decorative || !stop.logo ? "true" : undefined}>
+  {stop.logo
+    ? <img src={stop.logo} alt={decorative ? "" : `${stop.short} logo`} width={px} height={px} loading="lazy" decoding="async" />
+    : <span class="org-mono">{mono}</span>}
+</span>

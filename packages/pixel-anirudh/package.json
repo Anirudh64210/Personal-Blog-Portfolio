@@ -1,0 +1,24 @@
+{
+  "name": "pixel-anirudh",
+  "version": "1.3.0",
+  "description": "Full-body pixel companion for anirudh's personal site: engine plus a <pixel-anirudh> web component.",
+  "private": true,
+  "main": "src/engine.js",
+  "module": "src/engine.mjs",
+  "exports": {
+    ".": { "import": "./src/engine.mjs", "require": "./src/engine.js" },
+    "./element": "./src/element.mjs",
+    "./bundle": "./dist/pixel-anirudh.js"
+  },
+  "files": ["src", "dist", "assets"],
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "test": "node --test tests/sprite.test.mjs tests/poses.test.mjs",
+    "test:e2e": "node --test tests/element.e2e.mjs",
+    "test:all": "npm run build && node --test tests/sprite.test.mjs tests/poses.test.mjs tests/element.e2e.mjs",
+    "golden": "node scripts/update-golden.mjs",
+    "export": "python3 scripts/export_assets.py assets/export"
+  },
+  "engines": { "node": ">=18" },
+  "devDependencies": {}
+}

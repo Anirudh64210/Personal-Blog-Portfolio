@@ -1,99 +1,207 @@
 ---
 import Base from "../../layouts/Base.astro";
-import GrowthBadge from "../../components/GrowthBadge.astro";
-import { computeStatus } from "../../lib/status";
-import { readingTime } from "../../lib/readingTime";
+import Crumbs from "../../components/Crumbs.astro";
 import { site } from "../../config";
-import { getCollection, render } from "astro:content";
+import { getPosts, postUrl, minutes, longDate, updated, neighbours, seriesPosts, type Post } from "../../lib/posts";
+import { graph, breadcrumbs, PERSON_ID, WEBSITE_ID } from "../../lib/schema";
+import { render } from "astro:content";
 
 export async function getStaticPaths() {
-  const posts = (await getCollection("blog", ({ data }) => !data.draft)).sort(
-    (a, b) => (b.data.tended ?? b.data.planted).valueOf() - (a.data.tended ?? a.data.planted).valueOf()
-  );
-  return posts.map((post, i) => ({
-    params: { slug: post.id },
-    props: { post, newer: posts[i - 1] ?? null, older: posts[i + 1] ?? null },
-  }));
+  const posts = await getPosts();
+  return posts.map((post) => ({ params: { slug: post.id }, props: { post, all: posts } }));
 }
 
-const { post, newer, older } = Astro.props;
+const { post, all } = Astro.props as { post: Post; all: Post[] };
 const { Content, headings } = await render(post);
 const toc = headings.filter((h) => h.depth === 2);
 const d = post.data;
-const status = d.status ?? computeStatus(d.planted, d.tended);
-const mins = readingTime(post.body);
-const long = (x: Date) => x.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
-const canonical = new URL(`/blog/${post.id}`, site.url).href;
+const mins = minutes(post);
+const { prev, next, inSeries } = neighbours(post, all);
+const seriesList = d.series ? seriesPosts(d.series.name, all) : [];
+const seriesTotal = seriesList.length;
+// "Keep reading": same series first, then same category, then the newest others.
+// Skips this post and whatever the prev/next cards already show. Max 3.
+const shown = new Set([post.id, prev?.id, next?.id].filter(Boolean));
+const pool = [
+  ...seriesList,
+  ...all.filter((p) => p.data.category === d.category),
+  ...all,
+];
+const related: Post[] = [];
+for (const p of pool) {
+  if (related.length >= 3) break;
+  if (!shown.has(p.id)) { related.push(p); shown.add(p.id); }
+}
+const url = new URL(postUrl(post), site.url).href;
+const image = d.ogImage ?? `/og/posts/${post.id}.png`;
 
-const schema = {
-  "@context": "https://schema.org",
-  "@type": "BlogPosting",
-  headline: d.title,
-  description: d.description,
-  datePublished: d.planted.toISOString(),
-  dateModified: (d.tended ?? d.planted).toISOString(),
-  author: { "@type": "Person", name: site.name, url: site.url },
-  mainEntityOfPage: canonical,
-  image: new URL(d.ogImage ?? "/og/default.png", site.url).href,
-  wordCount: (post.body ?? "").split(/\s+/).filter(Boolean).length,
-  timeRequired: `PT${mins}M`,
-};
+const schema = graph(
+  {
+    "@type": "BlogPosting",
+    "@id": `${url}#post`,
+    headline: d.title,
+    description: d.description,
+    datePublished: d.planted.toISOString(),
+    dateModified: updated(post).toISOString(),
+    author: { "@id": PERSON_ID, "@type": "Person", name: site.name, url: site.url },
+    publisher: { "@id": PERSON_ID },
+    isPartOf: { "@id": WEBSITE_ID },
+    mainEntityOfPage: url,
+    url,
+    image: new URL(image, site.url).href,
+    articleSection: d.category,
+    keywords: [d.category, ...d.topic.split("·").map((t) => t.trim()), d.series?.name].filter(Boolean).join(", "),
+    ...(d.series ? { position: d.series.part } : {}),
+    wordCount: (post.body ?? "").split(/\s+/).filter(Boolean).length,
+    timeRequired: `PT${mins}M`,
+    inLanguage: "en-US",
+  },
+  breadcrumbs([
+    { name: "Home", path: "/" },
+    { name: "Writing", path: "/blog" },
+    { name: d.title, path: postUrl(post) },
+  ]),
+);
 ---
 <Base
   title={`${d.title} · ${site.name}`}
   description={d.description}
-  image={d.ogImage ?? "/og/default.png"}
+  image={image}
+  imageAlt={d.title}
   type="article"
   published={d.planted.toISOString()}
-  modified={(d.tended ?? d.planted).toISOString()}
+  modified={updated(post).toISOString()}
   schema={schema}
+  active="writing"
+  variant="band"
+  bodyClass="page-post"
 >
-  <main>
-    <div class={`article-shell${toc.length > 0 ? " has-toc" : ""}`}>
-    <article class="article">
-      <span class="label" data-text={`// ${d.topic}`}></span>
-      <h1 class="h1">{d.title}</h1>
-      <div class="ameta">
-        <GrowthBadge status={status} />
-        <span>Planted {long(d.planted)}{d.tended && ` · Tended ${long(d.tended)}`}</span>
-        <span class="rt">{mins} min read</span>
-        {d.backlinkHref && (
-          <a class="backlink" href={d.backlinkHref} target="_blank" rel="noopener">↩ {d.backlinkLabel ?? "source"}</a>
-        )}
+  <div class="progress-lane" slot="before-main" data-progress>
+    <div class="progress" aria-hidden="true">
+      <div class="progress-fill"></div>
+    </div>
+    <div class="rider" inert aria-hidden="true" data-rider>
+      <pixel-anirudh state="eat" scale="1"></pixel-anirudh>
+    </div>
+  </div>
+
+  <div class="wrap post-grid">
+    <header class="post-head">
+      <Crumbs items={[{ label: "Home", href: "/" }, { label: "Writing", href: "/blog" }, { label: d.category, href: `/blog?cat=${encodeURIComponent(d.category)}`, tag: true }]} />
+      <h1 class="post-h1">{d.title}</h1>
+      <p class="dek">{d.description}</p>
+      <div class="byline">
+        <img src="/portrait-88.webp" alt="" width="44" height="44" loading="lazy" decoding="async" />
+        <div class="who">
+          <span class="name">{site.name}</span>
+          <span class="meta">
+            <time datetime={d.planted.toISOString().slice(0, 10)}>{longDate(d.planted)}</time>
+            {d.tended && <> · updated <time datetime={d.tended.toISOString().slice(0, 10)}>{longDate(d.tended)}</time></>}
+            {" "}· {mins} min read
+            {d.series && ` · ${d.series.name} series, part ${d.series.part} of ${seriesTotal}`}
+          </span>
+        </div>
       </div>
-      <div class="prose staged">
+      {d.tldr && (
+        <aside class="tldr" aria-label="TL;DR">
+          <span class="rail-label">TL;DR</span>
+          <p>{d.tldr}</p>
+        </aside>
+      )}
+      {toc.length > 1 && (
+        <details class="toc-mobile">
+          <summary>ON THIS PAGE</summary>
+          <nav class="toc" aria-label="On this page">
+            {toc.map((h) => <a href={`#${h.slug}`}>{h.text}</a>)}
+          </nav>
+        </details>
+      )}
+    </header>
+
+    <aside class="post-rail" aria-label="Post tools">
+      <div class="post-rail-in">
+        {toc.length > 1 && (
+          <>
+            <span class="rail-label">ON THIS PAGE</span>
+            <nav class="toc" aria-label="On this page" data-toc>
+              {toc.map((h) => <a href={`#${h.slug}`} data-toc-link={h.slug}>{h.text}</a>)}
+            </nav>
+          </>
+        )}
+        {seriesTotal > 1 && (
+          <div class="rail-proj">
+            <span class="rail-label">IN THIS SERIES</span>
+            <ol class="series-list">
+              {seriesList.map((sp) => (
+                <li>
+                  {sp.id === post.id
+                    ? <span aria-current="page">{sp.data.series!.part}. {sp.data.title}</span>
+                    : <a href={postUrl(sp)}>{sp.data.series!.part}. {sp.data.title}</a>}
+                </li>
+              ))}
+            </ol>
+          </div>
+        )}
+        <div class="rail-proj">
+          {d.backlinkHref && (
+            <>
+              <span class="rail-label">FROM PROJECT</span>
+              <a href={d.backlinkHref} target="_blank" rel="noopener noreferrer">{d.backlinkLabel ?? "Project"} repo ↗<span class="sr-only"> (opens in a new tab)</span></a>
+            </>
+          )}
+          <button class="copy-link" type="button" data-copy-link={url}>Copy link</button>
+        </div>
+      </div>
+    </aside>
+
+    <article class="post-body">
+      <div class="prose">
         <Content />
       </div>
-      {(newer || older) && (
-        <nav class="postnav reveal" aria-label="More posts">
-          {newer ? (
-            <a class="pn pn--newer" href={`/blog/${newer.id}`}>
-              <span class="pn-k">← newer</span>
-              <span class="pn-t">{newer.data.title}</span>
+
+      {(prev || next) && (
+        <nav class="post-nav" aria-label={inSeries ? `More in the ${inSeries} series` : "More posts"}>
+          {prev && (
+            <a href={postUrl(prev)} rel="prev">
+              <span class="k">◂ {inSeries ? `Prev in ${inSeries}` : "Older"}</span>
+              <span class="t">{prev.data.title}</span>
             </a>
-          ) : <span class="pn pn--empty" aria-hidden="true"></span>}
-          {older && (
-            <a class="pn pn--older" href={`/blog/${older.id}`}>
-              <span class="pn-k">older →</span>
-              <span class="pn-t">{older.data.title}</span>
+          )}
+          {next && (
+            <a class="next" href={postUrl(next)} rel="next">
+              <span class="k">{inSeries ? `Next in ${inSeries}` : "Newer"} ▸</span>
+              <span class="t">{next.data.title}</span>
             </a>
           )}
         </nav>
       )}
-      <a class="allback" href="/blog">← all transmissions</a>
-    </article>
-    {toc.length > 0 && (
-      <aside class="toc" aria-label="On this page">
-        <div class="toc-in">
-          <span class="toc-h">// contents</span>
+      {related.length > 0 && (
+        <section class="keep-reading" aria-labelledby="keep-h">
+          <h2 id="keep-h" class="rail-label">KEEP READING</h2>
           <ul>
-            {toc.map((h) => (
-              <li><a href={`#${h.slug}`} data-toc={h.slug}>{h.text}</a></li>
+            {related.map((r) => (
+              <li>
+                <a href={postUrl(r)}>
+                  <span class="post-meta"><span>{longDate(r.data.planted)} · {minutes(r)} min</span><span class="tag tag--cat">{r.data.category}</span></span>
+                  <span class="t">{r.data.title}</span>
+                </a>
+              </li>
             ))}
           </ul>
-        </div>
-      </aside>
-    )}
-    </div>
-  </main>
+        </section>
+      )}
+      <div class="post-foot">
+        <span>Filed under <a href={`/blog?cat=${encodeURIComponent(d.category)}`}>{d.category}</a>{d.series && ` · ${d.series.name} series`}</span>
+        <span class="post-foot-links">
+          <a href="/">← Home</a>
+          <a href="/blog">All writing</a>
+          <a href="#top">Top ↑</a>
+        </span>
+      </div>
+    </article>
+  </div>
 </Base>
+
+<script>
+  import "../../scripts/post";
+</script>

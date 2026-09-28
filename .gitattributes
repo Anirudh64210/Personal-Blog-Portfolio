@@ -1,0 +1,9 @@
+# Keep LF line endings on every OS (Windows Git would otherwise convert them).
+* text=auto eol=lf
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.webp binary
+*.pdf binary
+*.woff binary
+*.woff2 binary

@@ -1,0 +1,62 @@
+---
+import { nav, site, socials } from "../config";
+
+interface Props {
+  active?: string;
+  variant?: "float" | "band";
+}
+const { active, variant = "float" } = Astro.props;
+---
+<header class:list={["site-head", `site-head--${variant}`]}>
+  <div class="wrap head-wrap">
+    {variant === "float" && (
+      <pixel-anirudh
+        class="mini"
+        autoplay
+        scale="1"
+        bubble-position="left"
+        greeting="hey, welcome in!"
+        greeting-back="oh hey, welcome back!"
+        greeting-note=""
+        menu-title="Want to reach out?"
+        reach-title="Find me here."
+        label="Pixel Anirudh, the site companion. Opens contact links."
+      >
+        <a slot="links" href={`mailto:${site.email}`}>Email</a>
+        {socials.map((s) => (
+          <a slot="links" href={s.href} target="_blank" rel="noopener noreferrer">{s.label}</a>
+        ))}
+      </pixel-anirudh>
+    )}
+    <div class="bar">
+      <a class="brand" href="/">Sai Anirudh Siddi</a>
+      <nav id="site-nav" class="nav" aria-label="Main">
+        {nav.map((n) => (
+          <a
+            class:list={["nav-link", { "is-active": active === n.key }]}
+            href={n.href}
+            aria-current={active === n.key ? "page" : undefined}
+          >{n.label}</a>
+        ))}
+        <span class="nav-div" aria-hidden="true"></span>
+        <a class="nav-link nav-search" href="/blog?q=" aria-label="Search posts" aria-current={active === "search" ? "page" : undefined}>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="M20 20l-3.5-3.5"></path></svg>
+          <span class="lbl">Search posts</span>
+        </a>
+      </nav>
+      <div class="bar-actions">
+        <button class="theme-toggle" type="button" aria-label="Switch to dark mode" data-theme-toggle>
+          <span class="to-dark">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5z"></path></svg>
+            <span class="lbl">Dark</span>
+          </span>
+          <span class="to-light">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"></path></svg>
+            <span class="lbl">Light</span>
+          </span>
+        </button>
+        <button class="menu-btn" type="button" aria-expanded="false" aria-controls="site-nav" data-menu>Menu</button>
+      </div>
+    </div>
+  </div>
+</header>

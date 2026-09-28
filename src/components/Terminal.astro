@@ -1,0 +1,47 @@
+---
+import { about } from "../config";
+import ascii from "./ascii-ani.txt?raw";
+// The about terminal. Every line is real HTML text (the old site typed it in with JS,
+// which is why search engines saw an empty page).
+const [user, host] = about.handle.split("@");
+---
+<section class="wrap term-section" aria-labelledby="about-h">
+  <div class="term">
+    <div class="term-bar" aria-hidden="true">
+      <span class="term-dot term-dot--r"></span><span class="term-dot term-dot--y"></span><span class="term-dot term-dot--g"></span>
+      <span class="term-title">{about.handle}: ~</span>
+    </div>
+    <div class="term-body">
+      <h2 id="about-h" class="sr-only">About Sai Anirudh Siddi</h2>
+      <p><span class="t-user">ani@vegas</span> <span class="t-path">~</span> $ <span class="t-cmd">ani --about</span></p>
+      <div class="about-row">
+        <pre class="ascii" aria-hidden="true">{ascii}</pre>
+        <div class="about-fields">
+          <p class="about-handle">{user}<span class="t-dim">@</span>{host}</p>
+          <p class="t-dim" aria-hidden="true">-----------------------</p>
+          <dl>
+            {about.fields.map(([k, vals]) => (
+              <div class="field">
+                <dt>{k}</dt>
+                <dd>{vals.map((v) => {
+                  const m = v.match(/^(.*?)\s*(\(in progress\))$/);
+                  return m ? <span>{m[1]} <span class="t-ok">{m[2]}</span></span> : <span>{v}</span>;
+                })}</dd>
+              </div>
+            ))}
+          </dl>
+          <div class="swatches" aria-hidden="true">
+            <span class="sw-1"></span><span class="sw-2"></span><span class="sw-3"></span><span class="sw-4"></span><span class="sw-5"></span><span class="sw-6"></span><span class="sw-7"></span>
+          </div>
+        </div>
+      </div>
+      <p><span class="t-user">ani@vegas</span> <span class="t-path">~</span> $ <span class="t-cmd">ani --abilities</span></p>
+      <ul class="abilities">
+        {about.abilities.map(([name, desc]) => (
+          <li class="ability"><span class="plus" aria-hidden="true">+</span><b>{name}</b><span class="desc">{desc}</span></li>
+        ))}
+      </ul>
+      <p aria-hidden="true"><span class="t-user">ani@vegas</span> <span class="t-path">~</span> $ <span class="cursor"></span></p>
+    </div>
+  </div>
+</section>
