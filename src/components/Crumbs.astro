@@ -1,0 +1,18 @@
+---
+// Breadcrumb trail shown at the top of every page below home, so there is always a
+// visible way back. The last item is the current page (not a link).
+interface Props { items: { label: string; href?: string; tag?: boolean }[] }
+const { items } = Astro.props;
+---
+<nav class="crumbs" aria-label="Breadcrumb">
+  <ol>
+    {items.map((it, i) => (
+      <li>
+        {i > 0 && <span class="sep" aria-hidden="true">/</span>}
+        {it.href
+          ? <a class:list={{ tag: it.tag, "tag--cat": it.tag }} href={it.href}>{it.label}</a>
+          : <span aria-current="page" class:list={{ tag: it.tag, "tag--cat": it.tag }}>{it.label}</span>}
+      </li>
+    ))}
+  </ol>
+</nav>

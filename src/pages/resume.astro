@@ -1,0 +1,88 @@
+---
+import Base from "../layouts/Base.astro";
+import Crumbs from "../components/Crumbs.astro";
+import { site, resume } from "../config";
+import { graph, website, profilePage, breadcrumbs } from "../lib/schema";
+
+const schema = graph(
+  website,
+  profilePage("/resume", `Résumé · ${site.name}`),
+  breadcrumbs([{ name: "Home", path: "/" }, { name: "Résumé", path: "/resume" }]),
+);
+---
+<Base
+  title={`Résumé · ${site.name}`}
+  description="Résumé of Sai Anirudh Siddi, AI engineer in Las Vegas."
+  schema={schema}
+  active="resume"
+>
+  <div class="resume-wrap">
+    <Crumbs items={[{ label: "Home", href: "/" }, { label: "Résumé" }]} />
+    <div class="resume-head">
+      <div class="titles">
+        <span class="eyebrow">Character sheet, official version</span>
+        <h1>Résumé</h1>
+      </div>
+      <div class="resume-actions">
+        <a class="btn btn--sm" href={site.resumePdf} target="_blank" rel="noopener noreferrer">Open PDF ↗<span class="sr-only"> (opens in a new tab)</span></a>
+        <a class="btn btn--sm btn--solid" href={site.resumePdf} download="Sai_Anirudh_Siddi_Resume.pdf">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4v11"></path><path d="M7 10l5 5 5-5"></path><path d="M5 20h14"></path></svg>
+          Download PDF
+        </a>
+      </div>
+    </div>
+
+    <article class="sheet" aria-label={`Résumé of ${site.name}`}>
+      <div class="sheet-top">
+        <p class="sheet-name">{site.name}</p>
+        <ul class="sheet-contact">
+          {resume.contact.map((c) => (
+            <li>{c.href ? <a href={c.href} {...(c.href.startsWith("http") ? { target: "_blank", rel: "noopener noreferrer" } : {})}>{c.text}</a> : c.text}</li>
+          ))}
+        </ul>
+      </div>
+
+      <h2>EDUCATION</h2>
+      {resume.education.map((e) => (
+        <div class="sheet-row">
+          <span><b>{e.degree}</b> · {e.school}</span>
+          <span class="sheet-date">{e.period}</span>
+        </div>
+      ))}
+
+      <h2>SKILLS</h2>
+      <div class="sheet-skills">
+        {resume.skills.map(([k, v]) => <p><b>{k}</b> {v}</p>)}
+      </div>
+
+      <h2>EXPERIENCE</h2>
+      {resume.experience.map((x) => (
+        <div class="sheet-item">
+          <div class="sheet-row">
+            <h3>{x.role} <span>· {x.org}</span></h3>
+            <span class="sheet-date">{x.period}</span>
+          </div>
+          <ul>{x.points.map((pt) => <li>{pt}</li>)}</ul>
+        </div>
+      ))}
+
+      <h2>PROJECTS</h2>
+      {resume.projects.map((x) => (
+        <div class="sheet-item">
+          <h3>{x.name} <span>· {x.kind}</span></h3>
+          <ul>{x.points.map((pt) => <li>{pt}</li>)}</ul>
+        </div>
+      ))}
+    </article>
+
+    <nav class="next-steps" aria-label="Keep exploring">
+      <span class="rail-label">KEEP EXPLORING</span>
+      <ul>
+        <li><a href="/experience"><b>Experience</b><span>Scrub through the run, stop by stop.</span></a></li>
+        <li><a href="/#projects"><b>Projects</b><span>Projects and what they won.</span></a></li>
+        <li><a href="/blog"><b>Writing</b><span>Notes on LLMs and interpretability.</span></a></li>
+        <li><a href="/#contact"><b>Contact</b><span>Say hi.</span></a></li>
+      </ul>
+    </nav>
+  </div>
+</Base>

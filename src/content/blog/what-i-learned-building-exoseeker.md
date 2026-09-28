@@ -1,6 +1,7 @@
 ---
 title: "What I learned building ExoSeeker"
 description: "Lessons from building an AI exoplanet-detection pipeline on NASA Kepler data that hit >90% accuracy and won Best Use of NASA Data."
+category: "ML"
 topic: "ml · nasa"
 planted: 2025-11-12
 backlinkLabel: "ExoSeeker"

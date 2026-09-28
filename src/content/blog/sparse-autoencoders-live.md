@@ -1,6 +1,10 @@
 ---
 title: "Sparse autoencoders, live"
 description: "An SAE turns a model's opaque residual stream into a cloud of readable features. Here's how GlassBox uses one as a live interpretability view, and why we don't trust it just on its own."
+category: "Interpretability"
+series:
+  name: "GlassBox"
+  part: 1
 topic: "interpretability · SAEs"
 planted: 2026-06-21
 ---

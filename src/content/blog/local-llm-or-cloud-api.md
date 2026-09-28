@@ -1,6 +1,7 @@
 ---
 title: "The crossroads: local LLM or cloud API"
 description: "Cloud models are faster and smarter, local models keep your data yours. Thoughts on the tradeoff from someone stuck at that crossroads, and why privacy isn't the argument."
+category: "LLMs"
 topic: "llms · application layer"
 planted: 2026-08-01
 ogImage: "/og/local-llm-or-cloud-api.png"

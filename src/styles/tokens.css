@@ -1,0 +1,122 @@
+/* Pixel Desk design tokens. Light and dark themes (both approved).
+   Colors are sampled from the pixel companion so the site and the sprite share one palette.
+   Use ROLE tokens in components (--text, --outline, --panel...), never raw hex. */
+
+:root {
+  color-scheme: light;
+
+  /* surfaces */
+  --bg: #EDE6D8;            /* page background (home, experience, resume); header band on posts */
+  --card: #FFFCF5;          /* cards, header bar, post page background */
+  --stage: #F7F1E4;         /* scrubber stage */
+  --tile-wip: #F7EEDC;      /* in-progress / dashed tiles */
+  --sheet: #FFFFFF;         /* resume sheet, code blocks */
+  --row-active: #FBF3DC;    /* active XP log row */
+  --panel: #1E1B2B;         /* dark panels: LATEST card, terminal, contact dialog, progress frame */
+  --on-panel: #FFFCF5;      /* text on --panel */
+  --on-panel-2: #CFC6D6;    /* secondary text on --panel */
+
+  /* text */
+  --text: #1E1B2B;
+  --text-body: #26232F;     /* long-form body */
+  --text-2: #3A3542;        /* secondary */
+  --muted: #6B6472;         /* meta, dates */
+  --accent-text: #8A4B2A;   /* eyebrow labels, accent links */
+  --link-hover: #3E62A8;
+
+  /* lines and depth */
+  --outline: #1E1B2B;       /* 2px borders on everything */
+  --rule-soft: #C9BCA6;     /* dashed dividers */
+  --shadow-color: #1E1B2B;  /* hard offset shadows */
+  --tick-off: #B8AE9C;      /* scrubber ticks after the thumb */
+
+  /* inverted controls (solid buttons, active nav pill, PRESS chip, action tag) */
+  --invert-bg: #1E1B2B;
+  --invert-fg: #FFFCF5;
+
+  /* accents (from the sprite) */
+  --brown: #8A4B2A;         /* jacket; fills, accent shadow, progress on track */
+  --amber: #F2B33D;         /* pizza; FILL ONLY (tags, knob, progress, highlight). Text on amber is always #1E1B2B */
+  --on-amber: #1E1B2B;
+  --blue: #3E62A8;          /* topic tags, focus ring */
+  --edu: #4F74B3;           /* EDUCATION chip */
+  --proj: #5E9E4A;          /* PROJECT chip */
+  --pink: #E0607E;          /* terminal dot, confetti */
+
+  /* terminal (always dark) */
+  --term-bg: var(--panel);
+  --term-fg: #CFC6D6;
+  --term-key: #F2B33D;
+  --term-prompt: #86C06A;
+  --term-path: #9CC3E0;
+
+  /* type */
+  --font-display: "Bricolage Grotesque Variable", "Bricolage Grotesque", system-ui, sans-serif;   /* 800 for h1/h2, 700 for card titles */
+  --font-body: "Figtree", system-ui, sans-serif;                  /* 400/600/700 */
+  --font-pixel: "Silkscreen", ui-monospace, monospace;            /* ONLY small uppercase labels, 10 to 13px */
+  --font-mono: "JetBrains Mono Variable", "JetBrains Mono", ui-monospace, monospace;         /* dates, terminal, code */
+  --fs-h1: 76px;  --fs-h1-post: 52px;  --fs-h2: 44px;  --fs-lead: 21px;
+  --fs-body: 17px; --fs-post: 18px; --lh-post: 1.65;  --fs-small: 14px;  --fs-label: 12px;
+
+  /* shape */
+  --border: 2px solid var(--outline);
+  --radius: 6px; --radius-sm: 4px;
+  --shadow: 6px 6px 0 var(--shadow-color);
+  --shadow-sm: 3px 3px 0 var(--shadow-color);
+  --shadow-accent: 6px 6px 0 var(--brown);
+
+  /* layout */
+  --maxw: 1160px; --maxw-post: 700px; --section-gap: 88px; --gutter: 16px;
+
+  /* companion bubble (pixel-anirudh --pa-* vars) */
+  --pa-font: var(--font-body);
+  --pa-bg: var(--card); --pa-fg: var(--text); --pa-muted: var(--muted); --pa-border: var(--outline);
+  --pa-accent: var(--invert-bg); --pa-accent-fg: var(--invert-fg); --pa-input-bg: var(--bg);
+  --pa-radius: 4px; --pa-shadow: 3px 3px 0 var(--shadow-color); --pa-focus: var(--blue);
+}
+
+/* ---------- Dark theme (approved) ----------
+   Warm charcoal, not black. Cream outlines keep the Pixel Desk look.
+   Contrast: --text on --card about 13:1, --muted on --card about 6:1. */
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --bg: #1C1A23;
+  --card: #262230;
+  --stage: #2E2A38;         /* lighter than the page so the sprite's dark outline and hair stay visible */
+  --tile-wip: #302838;
+  --sheet: #221F2B;
+  --row-active: #342E40;
+  --panel: #131118;
+  --on-panel: #F2EDE4;
+  --on-panel-2: #CFC6D6;
+
+  --text: #F2EDE4;
+  --text-body: #E6E0EA;
+  --text-2: #CFC6D6;
+  --muted: #A39CAD;
+  --accent-text: #E09A6C;   /* lightened brown for text */
+  --link-hover: #8FB0F0;
+
+  --outline: #CFC7B8;       /* cream outlines */
+  --rule-soft: #4A4458;
+  --shadow-color: #07060A;
+  --tick-off: #4A4458;
+
+  --invert-bg: #F2EDE4;     /* solid buttons flip to cream */
+  --invert-fg: #1C1A23;
+
+  --blue: #8FB0F0;
+  /* --amber, --on-amber, --brown, --edu, --proj, --pink unchanged */
+}
+
+/* Follow the system when the visitor has not chosen. The toggle writes data-theme explicitly. */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+    --bg: #1C1A23; --card: #262230; --stage: #2E2A38; --tile-wip: #302838; --sheet: #221F2B; --row-active: #342E40;
+    --panel: #131118; --on-panel: #F2EDE4; --on-panel-2: #CFC6D6;
+    --text: #F2EDE4; --text-body: #E6E0EA; --text-2: #CFC6D6; --muted: #A39CAD; --accent-text: #E09A6C; --link-hover: #8FB0F0;
+    --outline: #CFC7B8; --rule-soft: #4A4458; --shadow-color: #07060A; --tick-off: #4A4458;
+    --invert-bg: #F2EDE4; --invert-fg: #1C1A23; --blue: #8FB0F0;
+  }
+}

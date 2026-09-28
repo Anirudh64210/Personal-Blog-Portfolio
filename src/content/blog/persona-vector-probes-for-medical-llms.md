@@ -1,11 +1,13 @@
 ---
 title: "Persona-vector probes for medical LLMs"
 description: "Reading harmfulness, uncertainty, and other behaviors straight off a medical LLM's activations, and the custom probe builder that lets a clinician define new ones on demand."
+category: "Interpretability"
+series:
+  name: "GlassBox"
+  part: 3
 topic: "interpretability · probes"
 planted: 2026-06-21
 tended: 2026-06-24
-backlinkLabel: "GlassBox"
-backlinkHref: "https://github.com/Anirudh64210/glassbox"
 ---
 
 Try it out here - 

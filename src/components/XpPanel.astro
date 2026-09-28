@@ -1,0 +1,48 @@
+---
+// Detail card for the active stop plus a one-line jump list, shared by the home XP box and
+// /experience. Every stop's detail is in the HTML (search engines and no-JS readers see all
+// of them); with JS only the active one shows, so the layout never jumps as you scrub.
+import { xp } from "../config";
+import { kindClass } from "../lib/xp";
+import OrgMark from "./OrgMark.astro";
+
+interface Props { active: number; heading?: "h2" | "h3"; variant?: "card" | "page" }
+const { active, heading = "h3", variant = "card" } = Astro.props;
+const H = heading;
+---
+<div class:list={["xp-panel", `xp-panel--${variant}`]}>
+  <div class="xp-details">
+    {xp.map((s, i) => (
+      <article class:list={["xp-detail", { "is-active": i === active }]} data-stop={i} aria-labelledby={`stop-${variant}-${i}`}>
+        <div class="xp-detail-top">
+          <OrgMark stop={s} />
+          <div class="xp-detail-titles">
+            <div class="xp-detail-meta">
+              <span class={kindClass(s.kind)}>{s.kind}</span>
+              <span class="when">{s.period} · {s.place}</span>
+            </div>
+            <H id={`stop-${variant}-${i}`} class="xp-detail-h">{s.highlight ? <span class="hl">{s.role}</span> : s.role}</H>
+            <p class="xp-org">{s.org}</p>
+          </div>
+        </div>
+        <ul class="bullets">
+          {s.points.map((pt) => <li>{pt}</li>)}
+        </ul>
+      </article>
+    ))}
+  </div>
+  <div class="xp-side">
+    <div class="xp-steps">
+      <button class="btn" type="button" data-step="-1">◂ Earlier</button>
+      <button class="btn btn--solid" type="button" data-step="1">Later ▸</button>
+    </div>
+    <nav class="jump" aria-label="Jump to a stop">
+      {xp.map((s, i) => (
+        <button type="button" data-go={i} aria-pressed={i === active ? "true" : "false"}>
+          <OrgMark stop={s} size="sm" decorative />
+          <span class="jump-text"><b>{s.short}</b><span class="y">{s.years}</span></span>
+        </button>
+      )).reverse()}
+    </nav>
+  </div>
+</div>

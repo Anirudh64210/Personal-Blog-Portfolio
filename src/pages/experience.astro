@@ -1,0 +1,59 @@
+---
+import Base from "../layouts/Base.astro";
+import XpStage from "../components/XpStage.astro";
+import XpPanel from "../components/XpPanel.astro";
+import Crumbs from "../components/Crumbs.astro";
+import { site, xp } from "../config";
+import { defaultStop } from "../lib/xp";
+import { graph, website, profilePage, breadcrumbs } from "../lib/schema";
+
+const active = defaultStop();
+const schema = graph(
+  website,
+  profilePage("/experience", `Experience · ${site.name}`),
+  breadcrumbs([{ name: "Home", path: "/" }, { name: "Experience", path: "/experience" }]),
+);
+---
+<Base
+  title={`Experience · ${site.name}`}
+  description="Sai Anirudh Siddi's experience and education: Handshake AI, Great American Insurance, DRDO, University of Cincinnati and more."
+  schema={schema}
+  active="experience"
+>
+  <div class="wrap" data-xp data-xp-page>
+    <Crumbs items={[{ label: "Home", href: "/" }, { label: "Experience" }]} />
+    <div class="page-head">
+      <div class="titles">
+        <span class="eyebrow">XP log · {xp.length} stops · drag, click or use ← →</span>
+        <h1 class="page-title">Experience and education</h1>
+      </div>
+      <a class="btn btn--sm btn--shadow" href="/resume">View résumé</a>
+    </div>
+
+    <div class="xp-page-stage">
+      <div class="xp-card xp-card--page">
+        <XpStage active={active} />
+      </div>
+    </div>
+
+    <div class="xp-below">
+      <XpPanel active={active} heading="h2" variant="page" />
+    </div>
+
+    <nav class="next-steps" aria-label="Keep exploring">
+      <span class="rail-label">KEEP EXPLORING</span>
+      <ul>
+        <li><a href="/resume"><b>Résumé</b><span>The same run on one page, with a PDF.</span></a></li>
+        <li><a href="/#projects"><b>Projects</b><span>GlassBox, Toki, ExoSeeker, NeedleHelp and Aquaponics.</span></a></li>
+        <li><a href="/blog"><b>Writing</b><span>Notes on LLMs, interpretability and building AI products.</span></a></li>
+        <li><a href="/#contact"><b>Contact</b><span>Say hi. Always happy to meet new people.</span></a></li>
+      </ul>
+    </nav>
+  </div>
+</Base>
+
+<script>
+  import { initXp } from "../scripts/xp";
+  const root = document.querySelector<HTMLElement>("[data-xp-page]");
+  if (root) initXp(root, { arrowKeys: true });
+</script>

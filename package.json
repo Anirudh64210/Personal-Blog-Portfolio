@@ -8,8 +8,25 @@
     "preview": "astro preview"
   },
   "dependencies": {
+    "@astrojs/markdown-remark": "^7.3.1",
     "@astrojs/mdx": "^7.0.0",
+    "@fontsource-variable/bricolage-grotesque": "^5.3.0",
+    "@fontsource-variable/jetbrains-mono": "^5.3.0",
+    "@fontsource/bricolage-grotesque": "^5.3.0",
+    "@fontsource/figtree": "^5.3.0",
+    "@fontsource/silkscreen": "^5.3.0",
+    "@resvg/resvg-js": "^2.6.2",
     "@vercel/analytics": "^2.0.1",
-    "astro": "^7.0.3"
+    "astro": "^7.0.3",
+    "pixel-anirudh": "file:packages/pixel-anirudh",
+    "satori": "^0.33.5"
+  },
+  "private": true,
+  "description": "Personal site and blog of Sai Anirudh Siddi (saianirudh.blog)",
+  "overrides": {
+    "fflate": "^0.8.2"
+  },
+  "engines": {
+    "node": ">=22"
   }
 }

@@ -1,0 +1,74 @@
+---
+import Base from "../layouts/Base.astro";
+import Crumbs from "../components/Crumbs.astro";
+import { site } from "../config";
+import { graph, website, breadcrumbs } from "../lib/schema";
+
+// Plain-language privacy notice. Keep it true to what the site actually does:
+// if analytics, forms or embeds change, update this page in the same change.
+const updated = "September 27, 2026";
+const schema = graph(website, breadcrumbs([{ name: "Home", path: "/" }, { name: "Privacy", path: "/privacy" }]));
+---
+<Base
+  title={`Privacy · ${site.name}`}
+  description="How saianirudh.blog handles visitor data: no cookies, no tracking across sites, no forms. Anonymous page view counts only."
+  schema={schema}
+>
+  <div class="resume-wrap">
+    <Crumbs items={[{ label: "Home", href: "/" }, { label: "Privacy" }]} />
+    <div class="page-head">
+      <div class="titles">
+        <span class="eyebrow">Fine print, kept short</span>
+        <h1 class="page-title">Privacy</h1>
+        <p class="lead">Last updated {updated}.</p>
+      </div>
+    </div>
+
+    <article class="sheet legal prose">
+      <p>
+        This is a personal website. It has no accounts, no sign ups, no comment forms and no ads.
+        Nothing on it asks you for personal information, and it does not sell or share data with anyone.
+      </p>
+
+      <h2>What gets collected</h2>
+      <ul>
+        <li>
+          <strong>Anonymous page view counts.</strong> The site uses{" "}
+          <a href="https://vercel.com/docs/analytics/privacy-policy">Vercel Web Analytics</a>{" "}to count visits to each page.
+          It uses no cookies, collects no personal identifiers, and cannot follow you across other websites.
+          Visitors are grouped by a short-lived hash that Vercel discards after 24 hours, and the site owner
+          only ever sees aggregated numbers.
+        </li>
+        <li>
+          <strong>Standard server logs.</strong> The site is hosted on Vercel. Like any web server, Vercel
+          processes technical request data (such as IP address and browser type) to deliver pages and keep
+          the service secure. See{" "}<a href="https://vercel.com/legal/privacy-policy">Vercel's privacy policy</a>.
+        </li>
+      </ul>
+
+      <h2>What stays on your device</h2>
+      <p>
+        If you switch between light and dark mode, your choice is saved in your browser's local storage under
+        the key <code>theme</code>. It never leaves your device. Clear your site data to remove it.
+      </p>
+
+      <h2>What the site does not do</h2>
+      <ul>
+        <li>No cookies, no fingerprinting, no advertising or social media trackers.</li>
+        <li>No third-party fonts, scripts or embeds: everything loads from this domain.</li>
+        <li>The pixel companion runs entirely in your browser and sends nothing anywhere.</li>
+      </ul>
+
+      <h2>Links and email</h2>
+      <p>
+        Links to other sites (GitHub, LinkedIn, articles) are governed by those sites' own policies.
+        If you email me, I receive what you send and use it only to reply.
+      </p>
+
+      <h2>Questions</h2>
+      <p>
+        Email <a href={`mailto:${site.email}`}>{site.email}</a> with any privacy question or request.
+      </p>
+    </article>
+  </div>
+</Base>
