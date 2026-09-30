@@ -5,9 +5,44 @@ import satori from "satori";
 import { Resvg } from "@resvg/resvg-js";
 import { readFileSync } from "node:fs";
 import { createRequire } from "node:module";
+import { inflateSync } from "node:zlib";
 
 const require = createRequire(import.meta.url);
-const font = (p: string) => readFileSync(require.resolve(p));
+
+// WOFF to plain TTF/OTF with Node's zlib. satori would decompress WOFF itself with fflate,
+// but the fflate override in package.json (0.8.x, satori pins 0.7.3) breaks that and every
+// glyph renders as a box. Handing satori an uncompressed font sidesteps it.
+function woffToSfnt(w: Buffer): Buffer {
+  const n = w.readUInt16BE(12);
+  const tables = Array.from({ length: n }, (_, i) => {
+    const o = 44 + i * 20;
+    return { tag: w.readUInt32BE(o), off: w.readUInt32BE(o + 4), comp: w.readUInt32BE(o + 8), orig: w.readUInt32BE(o + 12), sum: w.readUInt32BE(o + 16) };
+  });
+  const pad = (x: number) => (x + 3) & ~3;
+  const out = Buffer.alloc(12 + 16 * n + tables.reduce((s, t) => s + pad(t.orig), 0));
+  let p = 1, e = 0;
+  while (p * 2 <= n) { p *= 2; e++; }
+  out.writeUInt32BE(w.readUInt32BE(4), 0);
+  out.writeUInt16BE(n, 4);
+  out.writeUInt16BE(p * 16, 6);
+  out.writeUInt16BE(e, 8);
+  out.writeUInt16BE(n * 16 - p * 16, 10);
+  let at = 12 + 16 * n;
+  tables.forEach((t, i) => {
+    const raw = w.subarray(t.off, t.off + t.comp);
+    const data = t.comp < t.orig ? inflateSync(raw) : raw;
+    const r = 12 + i * 16;
+    out.writeUInt32BE(t.tag, r);
+    out.writeUInt32BE(t.sum, r + 4);
+    out.writeUInt32BE(at, r + 8);
+    out.writeUInt32BE(t.orig, r + 12);
+    data.copy(out, at);
+    at += pad(t.orig);
+  });
+  return out;
+}
+
+const font = (p: string) => woffToSfnt(readFileSync(require.resolve(p)));
 const FONTS = [
   { name: "Bricolage", data: font("@fontsource/bricolage-grotesque/files/bricolage-grotesque-latin-800-normal.woff"), weight: 800 as const, style: "normal" as const },
   { name: "Figtree", data: font("@fontsource/figtree/files/figtree-latin-500-normal.woff"), weight: 500 as const, style: "normal" as const },
